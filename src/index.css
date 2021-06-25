@@ -1,0 +1,11 @@
+input.ui-box, .ui-dropdown\_\_container {
+  background-color: rgb(42, 41, 41) !important;
+}
+
+.ui\-dropdown\_\_container {
+  width: 100% !important;
+}
+
+.tabComponent {
+  margin: 20px;
+}

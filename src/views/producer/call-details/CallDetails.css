@@ -1,0 +1,22 @@
+.call-details-container {
+
+}
+
+.call-details-header {
+  height: 30px;
+  width: "100%";
+  border-style: "dashed";
+}
+
+.call-details-content{
+  height: calc(100% - 60px);
+  width: "100%";
+  border-style: "dashed";
+  overflow: "auto";
+}
+
+.call-details-footer {
+  height: 30px;
+  width: "100%";
+  border-style: "dashed";
+}

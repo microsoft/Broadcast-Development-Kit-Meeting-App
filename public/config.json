@@ -1,0 +1,20 @@
+{
+  "buildNumber": "0.0.0",
+  "apiBaseUrl": "https://localhost:8442/api",
+  "releaseDummyVariable": "empty",
+  "featureFlags": {
+    "DISABLE_AUTHENTICATION": {
+      "description": "Disable authentication flow when true",
+      "isActive": false,
+      "userRole": 1
+    }
+  },
+  "authConfig": {
+    "domain": "",
+    "clientId": "",
+    "instance": "",
+    "tenantId": "",
+    "groupId": "",
+    "spaClientId": ""
+  }
+}
