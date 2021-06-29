@@ -1,4 +1,30 @@
-# Project
+# Project (WIP)
+
+This repository contains a sample [application for Teams meetings](https://docs.microsoft.com/en-us/microsoftteams/platform/overview) to control the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) solution. This application can be loaded into Teams as an in-meeting app to use within the Teams client. 
+
+This Teams app is developed as a single page application (SPA) in React and TypeScript.
+
+## Exploring the repository
+
+The repository is structured in the following directories:
+- **src**: Contains the source code of the application.
+- **public**: Contains static files that are used in the application, including configuration files.
+- **manifest**: Contains the manifest file for the Teams app and the icons.
+- **docs**: Contains the documentation on the solution (TBC).
+
+## Dependencies
+
+This is not an standalone application. It requires an instance of the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) to work with. Check the documentation in that repository to run the **Broadcast Protocols for Teams** (either locally or in the cloud) before using this application.
+
+## License
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Licensed under the [MIT](LICENSE) license.
+
+---
+
+# Original README - Things to review
 
 > This repo has been populated by an initial template to help get you started. Please
 > make sure to update the content to build a great experience for community-building.
