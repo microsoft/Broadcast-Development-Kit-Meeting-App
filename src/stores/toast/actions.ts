@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { v4 as uuid4 } from 'uuid';
 import BaseAction from '../base/BaseAction';
 import { ToastItem } from './reducer';

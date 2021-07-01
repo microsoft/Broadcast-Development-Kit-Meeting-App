@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import * as ConfigActions from "./actions";
 import { Config } from "@/models/config/types";
 import { Reducer } from "redux";

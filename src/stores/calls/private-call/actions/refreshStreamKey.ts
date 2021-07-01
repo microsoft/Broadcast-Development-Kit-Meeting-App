@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { CallStreamKey } from '../../../../models/calls/types';
 import { ApiError } from '@/models/error/types';
 import { RequestResponse } from '@/services/api';

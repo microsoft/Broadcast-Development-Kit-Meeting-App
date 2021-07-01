@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Status, StatusCode } from "../global/types";
 
 export enum AuthStatusCode {

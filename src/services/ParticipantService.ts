@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { PublicCall, StreamType } from "@/models/calls/types";
 import { ApiError } from "@/models/error/types";
 import {ApiClient, RequestResponse } from "./api";

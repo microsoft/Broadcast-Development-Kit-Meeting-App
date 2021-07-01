@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { PublicCall } from "@/models/calls/types";
 import BaseAction, { RequestFinishedActionParameters } from "@/stores/base/BaseAction";

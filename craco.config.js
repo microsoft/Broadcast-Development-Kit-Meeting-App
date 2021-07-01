@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 const CracoAlias = require("craco-alias");
 const path = require("path");
 

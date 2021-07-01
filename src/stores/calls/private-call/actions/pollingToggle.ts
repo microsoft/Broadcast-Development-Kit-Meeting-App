@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import BaseAction from "@/stores/base/BaseAction";
 
 export const POLLING_TOGGLE = "POLLING_TOGGLE ";

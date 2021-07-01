@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Flex, Text } from "@fluentui/react-northstar";
 import * as React from "react";
 

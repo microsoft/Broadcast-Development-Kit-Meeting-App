@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Reducer } from "redux";
 import * as ToastsAction from "./actions";
 import baseReducer from "../base/BaseReducer";

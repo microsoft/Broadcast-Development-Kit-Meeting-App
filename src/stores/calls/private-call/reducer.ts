@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Resource } from "@/services/api";
 import baseReducer from "@/stores/base/BaseReducer";
 import { Reducer } from "redux";

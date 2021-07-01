@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { TeamsContextState } from "@/stores/teamsContext/reducer";
 import { RouterState } from "connected-react-router";
 import { AuthState } from "@/stores/auth/reducer";

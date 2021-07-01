@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { StreamType } from "@/models/calls/types";
 import { ParticipantService } from "@/services/ParticipantService";
 import AppState from "@/stores/AppState";

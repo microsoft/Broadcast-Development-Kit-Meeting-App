@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Reducer } from 'redux';
 import BaseAction from './BaseAction';
 

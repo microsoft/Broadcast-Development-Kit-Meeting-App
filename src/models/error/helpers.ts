@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ApiError } from "./types";
 
 export const fillApiErrorWithDefaults = (error: Partial<ApiError>, requestUrl: string): ApiError => {

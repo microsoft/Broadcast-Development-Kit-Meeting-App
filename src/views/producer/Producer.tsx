@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React, { Fragment, useEffect } from "react";
 import { Route, useHistory } from "react-router-dom";
 import { Flex, Loader } from "@fluentui/react-northstar";

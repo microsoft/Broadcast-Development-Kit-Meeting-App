@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 export const AUTHENTICATE_PATH = "/authenticate";
 export const AUTHENTICATION_START_PATH = "/auth/start";
 export const AUTHENTICATION_END_PATH = "/auth/end";

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import Axios, { Method, AxiosRequestConfig } from "axios";
 import { fillApiErrorWithDefaults } from "@/models/error/helpers";
 import { ApiError } from "@/models/error/types";

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React from "react";
 import { Icon } from "@iconify/react";
 import { RobotIcon } from "@fluentui/react-icons-northstar";

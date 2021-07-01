@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ApiClient, RequestResponse, Resource } from "./api";
 import { ApiError } from "@/models/error/types";
 import { InjectionStream, PrivateCall, StartStreamRequest, StopStreamRequest, Stream } from "@/models/calls/types";

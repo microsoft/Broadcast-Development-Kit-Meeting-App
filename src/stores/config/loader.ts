@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Config } from "@/models/config/types";
 import { DefaultError } from "@/models/error/types";
 import Axios from "axios";

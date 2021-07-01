@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React, { useEffect } from "react";
 import { useSelector , useDispatch} from "react-redux";
 import AppState from "@/stores/AppState";
