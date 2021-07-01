@@ -16,6 +16,25 @@ The repository is structured in the following directories:
 
 This is not an standalone application. It requires an instance of the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) to work with. Check the documentation in that repository to run the **Broadcast Protocols for Teams** (either locally or in the cloud) before using this application.
 
+## Getting Started
+
+This section will guide you through the process of configuring the solution to run it locally and/or in azure.
+
+### Prerequisites
+Before following the guides about how to run the solution locally and/or in Azure, we need to meet the following requirements:
+
+- [Node JS and npm](docs/how-to-install-nodejs-and-npm/readme.md)
+- [An instance (either locally or in the cloud) Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) to work with.
+
+
+### How to run the solution locally
+To run the solution in a local environment please follow the guide listed below:
+- [How to run the solution locally](docs/how-to-run-the-solution-locally/README.md)
+
+### How to run the solution in Azure
+To run the solution in Azure please follow the guide listed below:
+- [How to run the solution in Azure](docs/how-to-run-the-solution-in-azure/README.md)
+
 ## License
 
 Copyright (c) Microsoft Corporation. All rights reserved.
