@@ -1,4 +1,4 @@
-# Project (WIP)
+# Web UI for the Broadcast Protocols for Teams (WIP)
 
 This repository contains a sample [application for Teams meetings](https://docs.microsoft.com/en-us/microsoftteams/platform/overview) to control the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) solution. This application can be loaded into Teams as an in-meeting app to use within the Teams client. 
 
@@ -15,26 +15,6 @@ The repository is structured in the following directories:
 ## Dependencies
 
 This is not an standalone application. It requires an instance of the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) to work with. Check the documentation in that repository to run the **Broadcast Protocols for Teams** (either locally or in the cloud) before using this application.
-
-## License
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Licensed under the [MIT](LICENSE) license.
-
----
-
-# Original README - Things to review
-
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
-
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
 
 ## Contributing
 
@@ -57,3 +37,27 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+## License
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Licensed under the [MIT](LICENSE) license.
+
+## Acknowledgments
+
+The architecture used in this solution was inspired by the sample in [codeBelt/react-redux-architecture](https://github.com/codeBelt/react-redux-architecture).
+
+---
+
+## Things to review
+
+> This repo has been populated by an initial template to help get you started. Please
+> make sure to update the content to build a great experience for community-building.
+
+As the maintainer of this project, please make a few updates:
+
+- Improving this README.MD file to provide a great experience
+- Updating SUPPORT.MD with content about this project's support experience
+- Understanding the security reporting process in SECURITY.MD
+- Remove this section from the README
