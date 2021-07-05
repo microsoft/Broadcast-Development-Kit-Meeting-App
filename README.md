@@ -25,6 +25,7 @@ Before following the guides about how to run the solution locally and/or in Azur
 
 - [Node JS and npm](docs/how-to-install-nodejs-and-npm/readme.md)
 - [An instance (either locally or in the cloud) Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) to work with.
+- An Office 365 tenant and a team configured with Allow uploading custom apps enabled. For more information, see [prepare your Office 365 tenant](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant).
 
 
 ### How to run the solution locally
