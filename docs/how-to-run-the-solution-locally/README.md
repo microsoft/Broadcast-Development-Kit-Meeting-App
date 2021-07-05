@@ -1,6 +1,5 @@
-# [WIP]How to run the solution locally
+# How to run the solution locally
 
->**This is a draft and its format and content may change in future updates.**
 ## Getting Started
 The objective of this document is to explain the necessary steps to configure and run the Teams Meeting extension solution in a local environment. This includes:
 
@@ -11,9 +10,9 @@ The objective of this document is to explain the necessary steps to configure an
   - [Test the solution](#test-the-solution)
 
 ## Install and configure ngrok
-To run the solution locally we need to establish a secure tunnel between Microsoft Teams and our extension. Microsoft Teams is a cloud-based product and it requires our extension content be available from the cloud using HTTPS endpoints. 
+To run the solution locally we need to establish a secure tunnel between Microsoft Teams and our extension. Microsoft Teams is a cloud-based product, and it requires our extension content be available from the cloud using HTTPS endpoints. 
 
-For this purpose, we use [ngrok](https://ngrok.com/), a reverse proxy softawre tool that creates a tunnel to our locally running web server's publicly-available HTTPS endpoints.
+For this purpose, we use [ngrok](https://ngrok.com/), a reverse proxy softawre tool that creates a tunnel to our locally running web server's publicly available HTTPS endpoints.
 
 Because we have a dependency with [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) (backend solution from here) that also requires Ngrok, and Ngrok's free accounts only allow us to run just one instance at the same time, we recommend to create new account to get the required token to run an Ngrok instance. If you haven't downloaded Ngrok yet, you can donwload it from [here](https://www.ngrok.com/download)
 
@@ -29,7 +28,6 @@ After that, go to the directory where you unziped the `ngrok.exe` file and creat
 
 1. Open vscode
 2. Go to File -> New file (or press Ctrl+N)
-
 
 |![Ngrok Config File](images/ngrok_create_config_file_1.png)|
 |:--:|
@@ -80,7 +78,7 @@ Once finished you will notice that a directory called node_modules and a package
 
 ## Configure the Solution
 
-If we want to run the solution with the backend solution running locally,  we have to use the `config.json` as is.
+If we want to run the solution with the backend solution running locally, we have to use the `config.json` as is.
 
 **Running the solution with the backend running locally**
 ```json
@@ -101,7 +99,6 @@ If we want to run the solution with the backend solution running locally,  we ha
 To run the solution locally but with the backend running in Azure, you will need to create the respective [App Registration](), open the `config.json` file located in the `public` folder of the solution's root directory and edit the following parameters:
 
 **Running the solution with the backend running in Azure**
-
 
 ```json
 {
@@ -136,9 +133,7 @@ Placeholder | Description
  domain | TBD
 
 
-
 ## Build and run the Solution
-
 
 > NOTE: You must have follow all the steps every time you want to run the solution locally.
 
@@ -155,7 +150,7 @@ npm run start
 |:--:|
 |*Example of `npm run start` command running*|
 
-After that, a browser tab will open and an error message will be displayed.If you open the Developer Tools (`Ctrl+Shift+I` in Microsoft Edge), you will see the error's datail. This is because the meeting extension depends on the Microsoft Teams SDK, and it cannot be initialized outside a teams context. To properly use the extension you will need to install the extension in a Microsoft Teams meeting.
+After that, a browser tab will open, and an error message will be displayed. If you open the Developer Tools (`Ctrl+Shift+I` in Microsoft Edge), you will see the error's datail. This is because the meeting extension depends on the Microsoft Teams SDK, and it cannot be initialized outside a teams context. To properly use the extension, you will need to install the extension in a Microsoft Teams meeting.
 
 |![Locahost example](images/running-solution-localhost.png)|
 |:--:|
@@ -168,7 +163,7 @@ To install the extension, you must create the application package. It is a zip f
 - A transparent outline icon measuring 32 x 32 pixels.
 - A manifest.json file that specifies the attributes of your app.
 
-Before creating the package, you need to modify manually the manifest to specify the `HOSTNAME` url (base url where the extension is going to pull the content of the SPA). Because you need to establish a secure channel between Microsoft Teams and the extension (as mentioned [here](#Install-and-configure-ngrok)), you must run ngrok to create a tunnel to our locally running web server and expose it as a publicly-available HTTPS endpoint.
+Before creating the package, you need to modify manually the manifest to specify the `HOSTNAME` url (base url where the extension is going to pull the content of the SPA). Because you need to establish a secure channel between Microsoft Teams and the extension (as mentioned [here](#Install-and-configure-ngrok)), you must run ngrok to create a tunnel to our locally running web server and expose it as a publicly available HTTPS endpoint.
 
 Go to the directory where you put ngrok, open a windows terminal and run the following command
 
@@ -183,7 +178,6 @@ ngrok start --all --config {configFilePath}\ngrok-extension.yml
 ```
 
 where `{configFilePath}` is the path where you put the ngrok tool. E.g.: `c:\ngrok'.
-
 
 |![Ngrok command example](images/running-ngrok-example.png)|
 |:--:|
@@ -260,12 +254,68 @@ Finally, you can create the zip package with the files you have under `/manifest
 |:--:|
 |*Example of create zip package using 7zip*|
 
-
 ### Upload your application to Teams
 
-{{PENDING}}
+[Create](https://support.microsoft.com/en-us/office/schedule-a-meeting-in-teams-943507a9-8583-4c58-b5d2-8ec8265e04e5) a new microsoft teams meeting and join. Once you are inside the meeting, click on the three dots button `( ... )` and then on `+ Add an app`.
+
+|![`+` Add an app](images/add_an_app.png)|
+|:--:|
+|*`+` Add an app*|
+
+A pop up will open, select `Manage apps` in the bottom left corner of it.
+
+|![Add an app pop up](images/add_an_app_2.png)|
+|:--:|
+|*Add an app pop up*|
+
+A new window will open, select `Upload a custom app` in the bottom right corner of it  and select the `local.zip` file we have created previously.
+
+|![Upload a custom app](images/add_an_app_3.png)|
+|:--:|
+|*Upload a custom app*|
+
+A new pop up will open with details of the application, click on the `add` button.
+
+|![Upload a custom app](images/add_an_app_4.png)|
+|:--:|
+|*Upload a custom app*|
+
+After adding the app, inside the meeting click on the three dots button `( ... )`. The pop up will prompt the extension you added. Click on the extension to add it
+
+|![Add an app into the meeting](images/add_an_app_5.png)|
+|:--:|
+|*Add an app into the meeting*|
+
+A new pop up will open, press `save` to add the application.
+
+|![Add an app into the meeting](images/add_an_app_6.png)|
+|:--:|
+|*Add an app into the meeting*|
+
+Finally, the extension will be displayed as a side panel in the righht side of the meeting.
+
+|![Side panel extension](images/add_an_app_7.png)|
+|:--:|
+|*Side panel extension*|
 
 
 ## Test the solution
 
-{{PENDING}}
+Once you configured the extension in the Teams meeting, and ran the local backend, click on the `Join Meeting` button to invite the bot into the meeting.
+
+|![Join Meeting](images/test_extension.png)|
+|:--:|
+|*Join Meeting*|
+
+After a few seconds, the bot will join into the meeting, and you will see dashboard with the meeting participants and other options.
+
+|![In meeting](images/test_extension_2.png)|
+|:--:|
+|*In meeting*|
+
+In the image below, we can see an SRT extraction of a meeting participant.
+
+|![SRT extraction example](images/test_extension_3.png)|
+|:--:|
+|*SRT extraction example*|
+
