@@ -14,7 +14,7 @@ The objective of this document is to explain the necessary steps to configure an
   - [Test the Solution](#test-the-solution)
 
 ### Create a new App Registration
-This app registration is optional but can be created if the organization also wants to operate the solution through a Teams Meeting extension.
+Create a new [App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) in Azure for the solution.
 
 - `Name`: Any meaningful name (e.g: `broadcasterappextension`).
 - `Authentication`:
@@ -22,7 +22,7 @@ This app registration is optional but can be created if the organization also wa
   - `Implicit grant and hybrid flows`: Select both “Access tokens” and “ID tokens”.
   - `Supported account types`: Accounts in any organizational directory (Any Azure AD directory – Multitenant)
 - `Certificates and clients`: None.
-- `Token configuration`: Add a “groups claim” with following configuration app. Keep “Emit groups as role claims” unchecked for all types.
+- `Token configuration`: Press on `Add groups claim` and `Save` a new one with following configuration. Keep `Emit groups as role claims` unchecked for all types.
   - `Id`: Group ID.
   - `Access`: Group ID.
   - `SAML`: Group ID.
@@ -39,12 +39,20 @@ API / Permission name  | Type | Admin consent
   - `Expose an API`: Skip this section for now. It will be configured later once the extension is ready to be used.
   - `App roles`: None.
 
+After creating this App Registration copy the app ID and modify the Manifest of the App Registration created to the [Management API](https://github.com/microsoft/Teams-Broadcast-Extension/blob/documentation/docs/how-to-run-the-solution-in-azure/app_registrations.md#how-to-setup-management-api-application-registration) adding the following property:
+
+```json
+"knownClientApplications": ["{{applicationId}}"]
+```
+Placeholder | Description
+---------|----------
+applicationId | Client Id of the App Registration created for the spa.
 
 ### Create a new Azure Storage Account
 
 [Create](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) an Storage Account that will be used to host the Meeting Extension single-page solution.
 
-  - `Name`: dronetxextension (or any other meaningful name).
+  - `Name`: Any meaningful name (e.g: `broadcasterextension`).
   - `Region`: same region as the rest of the resources.
   - `Performance`: Standard.
   - `Redundancy`:  Locally-redundant storage (LRS).
@@ -84,6 +92,33 @@ After a few seconds the build of the solution will be finished and a new `build`
 
 ### Configure the solution
 
+**1.** In the Azure Portal, go to the App registration created above. Click on the menu option `Authentication` of the `Manage` section and Add a new [Redirect URI](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#add-a-redirect-uri) with the following values:
+- ```json
+  {{`primaryEndpoint`}}/auth/start
+  ```
+- ```json
+  {{`primaryEndpoint`}}/auth/end
+  ```
+
+(e.g:`https://broadcasterextension.z22.web.core.windows.net/auth/start` and `https://broadcasterextension.z22.web.core.windows.net/auth/end`)
+
+**2.** Go to the `Expose an API` option in the `Manage` section menu of the App Registration. Click on the `Set` link and add the following value:
+
+```json
+api://{{primaryEndpointWithoutProtocol}}/{{spaClientId}}
+```
+
+Placeholder | Description
+---------|----------
+spaClientId | Client Id of the App Registration of this frontend solution.
+primaryEndpointWithoutProtocol | `Primary endpoint` without the protocol (`https://`) copied from `Static website` menu of Storage Account (e.g: `broadcasterextension.z22.web.core.windows.net`)
+
+|![Expose an API](images/expose_an_api.png)|
+|:--:|
+|*Expose an API*|
+
+**3.** Open the `config.json` file located in the `build` folder of the solution's root directory (created in the [previous step](#install-and-build-the-solution)) and edit the following parameters:
+
 ```json
 {
   "buildNumber": "0.0.0",
@@ -97,7 +132,7 @@ After a few seconds the build of the solution will be finished and a new `build`
   },
   "authConfig": {
     "domain": "{{domain}}",
-    "instance": "{{instance}}",
+    "instance": "https://login.microsoftonline.com/",
     "tenantId": "{{tenantId}}",
     "groupId": "{{groupId}}",
     "spaClientId": "{{spaClientId}}",
@@ -107,6 +142,16 @@ After a few seconds the build of the solution will be finished and a new `build`
 
 ```
 
+Placeholder | Description
+---------|----------
+ apiBaseUrl | Base url of the Management API hosted in Azure.
+ spaClientId | Client Id of the App Registration of this frontend solution.
+ clientId | Client Id of the App Registration of the ManagementApi.
+ groupId | ObjectId of the group created on Azure.
+ tenantId | Azure account Tenant Id.
+ domain | Domain of your organization. (e.g: `mydomain.com`)
+
+Go to the manifest folder in the root directory of the solution and edit the `manifest.json` file, which we are going to use to create the [App package](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/apps-package), with the following values:
 
 ```json
 {
@@ -117,13 +162,13 @@ After a few seconds the build of the solution will be finished and a new `build`
   "packageName": "text",
   "webApplicationInfo": {
     "id": "{{spaClientId}}",
-    "resource": "api://{{primaryEndpoint}}/{{spaClientId}}"
+    "resource": "{{apiExposed}}"
   },
   "developer": {
     "name": "Microsoft",
-    "websiteUrl": "",
-    "privacyUrl": "",
-    "termsOfUseUrl": ""
+    "websiteUrl": "https://{{primaryEndpointWithoutProtocol}}/call/join",
+    "privacyUrl": "https://{{primaryEndpointWithoutProtocol}}/privacy.html",
+    "termsOfUseUrl": "https://{{primaryEndpointWithoutProtocol}}/tou.html"
   },
   "name": {
     "short": "Broadcast Protocols",
@@ -140,7 +185,7 @@ After a few seconds the build of the solution will be finished and a new `build`
   "accentColor": "#D85028",
   "configurableTabs": [
     {
-      "configurationUrl": "https://{{primaryEndpoint}}/config",
+      "configurationUrl": "https://{{primaryEndpointWithoutProtocol}}/config",
       "canUpdateConfiguration": false,
       "scopes": [
         "groupchat"
@@ -157,11 +202,42 @@ After a few seconds the build of the solution will be finished and a new `build`
   "connectors": [],
   "composeExtensions": [],
   "permissions": ["identity", "messageTeamMembers"],
-  "validDomains": ["{{primaryEndpoint}}"]
+  "validDomains": ["{{primaryEndpointWithoutProtocol}}"]
 }
 ```
 
+Placeholder | Description
+---------|----------
+spaClientId | Client Id of the App Registration of this frontend solution.
+apiExposed | API exposed in the App Registration (`api://{{primaryEndpointWithoutProtocol}}/{{spaClientId}}`)
+primaryEndpointWithoutProtocol | `Primary endpoint` without the protocol (`https://`) copied from `Static website` menu of Storage Account (e.g: `broadcasterextension.z22.web.core.windows.net`)
+
 ### Upload the build to the storage container
+In the Azure Portal, in the created Storage Account go to the `Access keys` menu in the `Security + Networking` section, click on the `Show keys` button and copy the `Connection string`.
+
+|![Copy the Connection string](images/connection_string.png)|
+|:--:|
+|*Copy the `Connection string` of the Storage Account*|
+
+Install and open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) click on the Connect button, select `Storage account or service` then `Connection string (key o SAS)` and click `Next`.
+
+|![Connect to the Storage Account](images/connect_storage_explorer.png)|
+|:--:|
+|*Connect to the Storage account using the Connection String*|
+
+In the `Connection string` field enter the connection string copied from the Storage Account and confirm the following steps.
+
+The created storage account will appear inside the `Storage Accounts` of the Storage Explorer. Inside blob containers you will find the `$web` container.
+
+|![$web container in Storage Explorer](images/storage_explorer.png)|
+|:--:|
+|*Open the `$web` container of the Storage Account*|
+
+Copy the files from the `build` folder generated by the solution and upload it to the `$web` container by dragging the files to it. After a few seconds the files will finish being loaded into the container and will appear inside it.
+
+|![Drag the build files into the container](images/upload_build.png)|
+|:--:|
+|*Drag the content of the `build` folder into the `$web` container*|
 ### Zip and upload the manifest to Microsft Teams meeting
 Go to the manifest folder in the root directory of the solution. Select all files in the folder and right-click on them. Select `Send to` and then `Compressed (zipped) folder`. A new file named `manifest.zip` will be created.
 
@@ -201,9 +277,8 @@ Join the meeting and click on the three dots button on the top menu, choose the 
 
 A new window will open, press `save` to add the application.
 
-|![Press save](images/droadcast_popup.png)|
+|![Press save](images/broadcast_popup.png)|
 |:--:|
 |*Press save to add the app*|
-
 
 ### Test the solution
