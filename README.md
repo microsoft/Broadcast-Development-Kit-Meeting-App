@@ -1,8 +1,14 @@
-# Web UI for the Broadcast Protocols for Teams (WIP)
+# Web UI for the Broadcast Development Kit (WIP)
 
-This repository contains a sample [application for Teams meetings](https://docs.microsoft.com/en-us/microsoftteams/platform/overview) to control the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) solution. This application can be loaded into Teams as an in-meeting app to use within the Teams client. 
+This repository contains a sample [application for Teams meetings](https://docs.microsoft.com/en-us/microsoftteams/platform/overview) to control the [Broadcast Development Kit](https://github.com/microsoft/Teams-Broadcast-Extension) solution. This application can be loaded into Teams as an in-meeting app to use within the Teams client. 
 
 This Teams app is developed as a single page application (SPA) in React and TypeScript.
+
+![Screenshot of the web UI](docs/common/images/cover.png)
+
+## Getting started
+
+TBD
 
 ## Exploring the repository
 
@@ -14,7 +20,7 @@ The repository is structured in the following directories:
 
 ## Dependencies
 
-This is not an standalone application. It requires an instance of the [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) to work with. Check the documentation in that repository to run the **Broadcast Protocols for Teams** (either locally or in the cloud) before using this application.
+This is not an standalone application. It requires an instance of the [Broadcast Development Kit](https://github.com/microsoft/Teams-Broadcast-Extension) to work with. Check the documentation in that repository to run the **Broadcast Development Kit** (either locally or in the cloud) before using this application.
 
 ## Contributing
 
