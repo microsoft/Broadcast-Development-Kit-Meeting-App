@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.9",
+  "id": "00000000-0000-0000-0000-000000000000",
+  "version": "0.0.1",
+  "packageName": "text",
+  "webApplicationInfo": {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "resource": "api://5caa9fc33696.ngrok.io/00000000-0000-0000-0000-000000000000"
+  },
+  "developer": {
+    "name": "Microsoft",
+    "websiteUrl": "https://5caa9fc33696.ngrok.io/call/join",
+    "privacyUrl": "https://5caa9fc33696.ngrok.io/privacy.html",
+    "termsOfUseUrl": "https://5caa9fc33696.ngrok.io/tou.html"
+  },
+  "name": {
+    "short": "Broadcast Development Kit",
+    "full": "Broadcast Development Kit for Teams"
+  },
+  "description": {
+    "short": "Operate the Broadcast Development Kit for Teams inside your teams meeting",
+    "full": "This extension allows you to use the Broadcast Development Kit for Teams solution you have deployed for your Office 365 tenant directly within Teams"
+  },
+  "icons": {
+    "outline": "icon-outline.png",
+    "color": "icon-color.png"
+  },
+  "accentColor": "#D85028",
+  "configurableTabs": [
+    {
+      "configurationUrl": "https://5caa9fc33696.ngrok.io/config",
+      "canUpdateConfiguration": false,
+      "scopes": [
+        "groupchat"
+      ],
+      "context": [
+        "meetingChatTab",
+        "meetingDetailsTab",
+        "meetingSidePanel"
+      ]
+    }
+  ],
+  "staticTabs": [],
+  "bots": [],
+  "connectors": [],
+  "composeExtensions": [],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "5caa9fc33696.ngrok.io"
+  ]
+}

@@ -1,6 +1,4 @@
-# [WIP] How to run the solution in Azure
-
->**This is a draft and its format and content may change in future updates.**
+# How to run the solution in Azure
 
 ## Getting Started
 The objective of this document is to explain the necessary steps to configure and run the Teams Meeting extension solution in Azure. This includes:
@@ -22,11 +20,11 @@ Create a new [App Registration](https://docs.microsoft.com/en-us/azure/active-di
   - `Implicit grant and hybrid flows`: Select both “Access tokens” and “ID tokens”.
   - `Supported account types`: Accounts in any organizational directory (Any Azure AD directory – Multitenant)
 - `Certificates and clients`: None.
-- `Token configuration`: Press on `Add groups claim` and `Save` a new one with following configuration. Keep `Emit groups as role claims` unchecked for all types.
+- `Token configuration`: Press on `Add groups claim` and `Save` a new one with following configuration. Keep `Emit groups as role claims` **unchecked** for all types.
   - `Id`: Group ID.
   - `Access`: Group ID.
   - `SAML`: Group ID.
-- `API permissions`: Add the following permissions to this application.
+- `API permissions`: Add the following Microsoft Graph permissions to this application.
 
 API / Permission name  | Type | Admin consent
 ---------|----------|---------
@@ -35,6 +33,12 @@ API / Permission name  | Type | Admin consent
  openid | Delegated | No
  profile | Delegated | No
  User.Read | Delegated | No
+
+ Also add the following permission which is the API scope that had to be created when [configuring the backend](https://github.com/microsoft/Teams-Broadcast-Extension/blob/documentation/docs/how-to-run-the-solution-in-azure/app_registrations.md#expose-an-api-1) `ManagementApi` app registration.
+
+ API / Permission name  | Type | Admin consent
+---------|----------|---------
+ access_as_producer | Delegated | No
 
   - `Expose an API`: Skip this section for now. It will be configured later once the extension is ready to be used.
   - `App roles`: None.
@@ -52,7 +56,7 @@ applicationId | Client Id of the App Registration created for the spa.
 
 [Create](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) an Storage Account that will be used to host the Meeting Extension single-page solution.
 
-  - `Name`: Any meaningful name (e.g: `broadcasterextension`).
+  - `Name`: Any meaningful name (e.g: `broadcastextension`).
   - `Region`: same region as the rest of the resources.
   - `Performance`: Standard.
   - `Redundancy`:  Locally-redundant storage (LRS).
@@ -67,30 +71,32 @@ Leave the rest of the settings as-is. Once this Storage Account is created, go t
 |:--:|
 |*Static Website Configuration*|
 
->Copy the value of `Primary endpoint` that will appear after pressing save, we will use it later to configure the solution.
+>Copy the value of `Primary endpoint` that will appear after pressing save, this value is needed later on to configure the solution.
 
 ### Install and build the solution
-1. Go to the main directory of the solution open a command console in that directory and enter the command `npm i`. It will start the installation of the packages used by the solution which may take a few seconds.
+1. Go to the main directory of the solution open a terminal in that directory and enter the command `npm i`. It will start the installation of the packages used by the solution which may take a few seconds.
 
 |![npm i running](images/installing.png)|
 |:--:|
 |*`npm i` command is running*|
 
->You can open a console in a particular directory by holding down the ***shift*** key and right clicking on an empty space and selecting the option `Open PowerShell window here`.
+>You can open a terminal in a particular directory by holding down the ***shift*** key and right clicking on an empty space and selecting the option `Open PowerShell window here`.
 >![Open PowerShell window here](images/open_console.png)
 
 Once finished you will notice that a directory called node_modules and a package-lock.json file have been created.
 
-2. In the same command prompt enter the following command: `npm run build`.
+2. In the same terminal enter the following command: `npm run build`.
 
-After a few seconds the build of the solution will be finished and a new `build` directory will be created in the root directory of the solution. The console will display a message like the following:
+After a few seconds the build of the solution will be finished and a new `build` directory will be created in the root directory of the solution. The terminal will display a message like the following:
 
-|![Console after finishing the build](images/build.png)|
+|![Terminal after finishing the build](images/build.png)|
 |:--:|
-|*Console after finishing the build*|
+|*Terminal after finishing the build*|
 
 
 ### Configure the solution
+
+#### Configure the App Registration
 
 **1.** In the Azure Portal, go to the App registration created above. Click on the menu option `Authentication` of the `Manage` section and Add a new [Redirect URI](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#add-a-redirect-uri) with the following values:
 - ```json
@@ -100,7 +106,7 @@ After a few seconds the build of the solution will be finished and a new `build`
   {{`primaryEndpoint`}}/auth/end
   ```
 
-(e.g:`https://broadcasterextension.z22.web.core.windows.net/auth/start` and `https://broadcasterextension.z22.web.core.windows.net/auth/end`)
+(e.g:`https://broadcastextension.z22.web.core.windows.net/auth/start` and `https://broadcastextension.z22.web.core.windows.net/auth/end`)
 
 **2.** Go to the `Expose an API` option in the `Manage` section menu of the App Registration. Click on the `Set` link and add the following value:
 
@@ -110,20 +116,37 @@ api://{{primaryEndpointWithoutProtocol}}/{{spaClientId}}
 
 Placeholder | Description
 ---------|----------
+primaryEndpointWithoutProtocol | `Primary endpoint` without the protocol (`https://`) copied from `Static website` menu of Storage Account (e.g: `broadcastextension.z22.web.core.windows.net`)
 spaClientId | Client Id of the App Registration of this frontend solution.
-primaryEndpointWithoutProtocol | `Primary endpoint` without the protocol (`https://`) copied from `Static website` menu of Storage Account (e.g: `broadcasterextension.z22.web.core.windows.net`)
 
 |![Expose an API](images/expose_an_api.png)|
 |:--:|
 |*Expose an API*|
 
-**3.** Open the `config.json` file located in the `build` folder of the solution's root directory (created in the [previous step](#install-and-build-the-solution)) and edit the following parameters:
+Press on the `+ Add a scope` button and create a new scope with the following data:
+- `Scope name`: "access_as_producer"
+- `Who can consent?`: Admin and users
+- `Admin consent display name`: "Access Broadcaster as Admin"
+- `Admin consent description`: "Allow the app to read the signed-in user's profile"
+- `User consent display name`: "Access Broadcaster as user"
+- `User consent description`: "Allow the app to read the signed-in user's profile"
+
+Press on the `+ Add a client application` button and fill with the following values and check the Authorized scope:
+- `1fec8e78-bce4-4aaf-ab1b-5451cc387264`
+- `5e3ce6c0-2b1f-4285-8d4b-75ee78787346`
+
+|![add a client application](images/add_client_application.png)|
+|:--:|
+|*Add a client application*|
+
+#### Setup the config.json file
+
+Open the `config.json` file located in the `build` folder of the solution's root directory (created in the [previous step](#install-and-build-the-solution)) and edit the following parameters:
 
 ```json
 {
   "buildNumber": "0.0.0",
   "apiBaseUrl": "https://{{apiBaseUrl}}/api",
-  "releaseDummyVariable": "empty",
   "featureFlags": {
     "DISABLE_AUTHENTICATION": {
       "description": "Disable authentication flow when true",
@@ -151,6 +174,8 @@ Placeholder | Description
  tenantId | Azure account Tenant Id.
  domain | Domain of your organization. (e.g: `mydomain.com`)
 
+#### Setup the application package
+
 Go to the manifest folder in the root directory of the solution and edit the `manifest.json` file, which we are going to use to create the [App package](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/apps-package), with the following values:
 
 ```json
@@ -171,12 +196,12 @@ Go to the manifest folder in the root directory of the solution and edit the `ma
     "termsOfUseUrl": "https://{{primaryEndpointWithoutProtocol}}/tou.html"
   },
   "name": {
-    "short": "Broadcast Protocols",
-    "full": "Broadcast Protocols for Teams"
+    "short": "Broadcast Development Kit",
+    "full": "Broadcast Development Kit for Teams"
   },
   "description": {
-    "short": "Operate the Broadcast Protocols for Teams inside your teams meeting",
-    "full": "This extension allows you to use the Broadcast Protocols for Teams solution you have deployed for your Office 365 tenant directly within Teams"
+    "short": "Operate the Broadcast Development Kit for Teams inside your teams meeting",
+    "full": "This extension allows you to use the Broadcast Development kit for Teams solution you have deployed for your Office 365 tenant directly within Teams"
   },
   "icons": {
     "outline": "icon-outline.png",
@@ -210,16 +235,16 @@ Placeholder | Description
 ---------|----------
 spaClientId | Client Id of the App Registration of this frontend solution.
 apiExposed | API exposed in the App Registration (`api://{{primaryEndpointWithoutProtocol}}/{{spaClientId}}`)
-primaryEndpointWithoutProtocol | `Primary endpoint` without the protocol (`https://`) copied from `Static website` menu of Storage Account (e.g: `broadcasterextension.z22.web.core.windows.net`)
+primaryEndpointWithoutProtocol | `Primary endpoint` without the protocol (`https://`) copied from `Static website` menu of Storage Account (e.g: `broadcastextension.z22.web.core.windows.net`)
 
 ### Upload the build to the storage container
-In the Azure Portal, in the created Storage Account go to the `Access keys` menu in the `Security + Networking` section, click on the `Show keys` button and copy the `Connection string`.
+Open the created Storage Account go to the `Access keys` menu in the `Security + Networking` section, click on the `Show keys` button and copy the `Connection string`.
 
 |![Copy the Connection string](images/connection_string.png)|
 |:--:|
 |*Copy the `Connection string` of the Storage Account*|
 
-Install and open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) click on the Connect button, select `Storage account or service` then `Connection string (key o SAS)` and click `Next`.
+Install and open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/). After that, click on the Connect button, select `Storage account or service`, choose the `Connection string (key o SAS)` option and click `Next`.
 
 |![Connect to the Storage Account](images/connect_storage_explorer.png)|
 |:--:|
@@ -282,3 +307,22 @@ A new window will open, press `save` to add the application.
 |*Press save to add the app*|
 
 ### Test the solution
+
+Once you configured the extension in the Teams meeting, and ran the local backend, click on the `Join Meeting` button to invite the bot into the meeting.
+
+|![Join Meeting](images/test_extension.png)|
+|:--:|
+|*Join Meeting*|
+
+After a few seconds, the bot will join into the meeting, and you will see dashboard with the meeting participants and other options.
+
+|![In meeting](images/test_extension_2.png)|
+|:--:|
+|*In meeting*|
+
+In the image below, we can see an SRT extraction of a meeting participant.
+
+|![SRT extraction example](images/test_extension_3.png)|
+|:--:|
+|*SRT extraction example*|
+

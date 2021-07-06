@@ -10,11 +10,11 @@ The objective of this document is to explain the necessary steps to configure an
   - [Test the solution](#test-the-solution)
 
 ## Install and configure ngrok
-To run the solution locally we need to establish a secure tunnel between Microsoft Teams and our extension. Microsoft Teams is a cloud-based product, and it requires our extension content be available from the cloud using HTTPS endpoints. 
+To run the solution locally you need to establish a secure tunnel between Microsoft Teams and our extension. Microsoft Teams is a cloud-based product, and it requires our extension content be available from the cloud using HTTPS endpoints. 
 
-For this purpose, we use [ngrok](https://ngrok.com/), a reverse proxy softawre tool that creates a tunnel to our locally running web server's publicly available HTTPS endpoints.
+For this purpose, you use [ngrok](https://ngrok.com/), a reverse proxy software tool that creates a tunnel to our locally running web server's publicly available HTTPS endpoints.
 
-Because we have a dependency with [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) (backend solution from here) that also requires Ngrok, and Ngrok's free accounts only allow us to run just one instance at the same time, we recommend to create new account to get the required token to run an Ngrok instance. If you haven't downloaded Ngrok yet, you can donwload it from [here](https://www.ngrok.com/download)
+Because the frontend solution has a dependency with [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) (backend solution from here) that also requires Ngrok, and Ngrok's free accounts only allow us to run just one instance at the same time, we recommend you to create new account to get the required token to run an Ngrok instance. If you haven't downloaded Ngrok yet, you can donwload it from [here](https://www.ngrok.com/download)
 
 Login into your new Ngrok account and in the left menu, in the `Getting Started` section, select the option `Your Authtoken` and copy it. We will use this token to configure our instance of ngrok.
 
@@ -78,9 +78,8 @@ Once finished you will notice that a directory called node_modules and a package
 
 ## Configure the Solution
 
-If we want to run the solution with the backend solution running locally, we have to use the `config.json` as is.
+ To run the solution, you must have the backend solution running locally, and use the `config.json` as is.
 
-**Running the solution with the backend running locally**
 ```json
 {
   "buildNumber": "0.0.0",
@@ -93,51 +92,13 @@ If we want to run the solution with the backend solution running locally, we hav
     }
   }
 }
-
 ```
-
-To run the solution locally but with the backend running in Azure, you will need to create the respective [App Registration](), open the `config.json` file located in the `public` folder of the solution's root directory and edit the following parameters:
-
-**Running the solution with the backend running in Azure**
-
-```json
-{
-  "buildNumber": "0.0.0",
-  "apiBaseUrl": "https://{{apiBaseUrl}}/api",
-  "releaseDummyVariable": "empty",
-  "featureFlags": {
-    "DISABLE_AUTHENTICATION": {
-      "description": "Disable authentication flow when true",
-      "isActive": false
-    }
-  },
-  "authConfig": {
-    "domain": "{{domain}}",
-    "instance": "{{instance}}",
-    "tenantId": "{{tenantId}}",
-    "groupId": "{{groupId}}",
-    "spaClientId": "{{spaClientId}}",
-    "clientId": "{{clientId}}",
-  }
-}
-
-```
-Placeholder | Description 
----------|----------
- apiBaseUrl | Base url of the Management API hosted in Azure.
- spaClientId | Client Id of the App Registration of this frontend solution.
- clientId | Client Id of the App Registration of the ManagementApi. 
- groupId | ObjectId of the group created on Azure. 
- tenantId | Azure account Tenant Id.
- instance | TBD
- domain | TBD
 
 
 ## Build and run the Solution
 
 > NOTE: You must have follow all the steps every time you want to run the solution locally.
 
-> NOTE: If you configured the extension to run it with a local backend, you must have running the backend to properly use the extension.
 
 ### Run your application in localhost
 To run your application, go to the main directory of the solution, open a terminal window and enter the the following command:
@@ -163,6 +124,8 @@ To install the extension, you must create the application package. It is a zip f
 - A transparent outline icon measuring 32 x 32 pixels.
 - A manifest.json file that specifies the attributes of your app.
 
+[More info about Microsoft Teams app package](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/apps-package)
+
 Before creating the package, you need to modify manually the manifest to specify the `HOSTNAME` url (base url where the extension is going to pull the content of the SPA). Because you need to establish a secure channel between Microsoft Teams and the extension (as mentioned [here](#Install-and-configure-ngrok)), you must run ngrok to create a tunnel to our locally running web server and expose it as a publicly available HTTPS endpoint.
 
 Go to the directory where you put ngrok, open a windows terminal and run the following command
@@ -187,7 +150,7 @@ where `{configFilePath}` is the path where you put the ngrok tool. E.g.: `c:\ngr
 |:--:|
 |*Example of ngrok running*|
 
-Create a `manifest.json` file under `/manifests/local` using the template you have below,  replace `{{HOSTNAME}}` with the ngrok url (without HTTP/HTTPS://) and save it.
+Create a `manifest.json` file under `/manifests/local` using the template you have below, replace `{{HOSTNAME}}` with the ngrok url (without HTTP/HTTPS://) and save it.
 
 ```json
 {
@@ -201,18 +164,18 @@ Create a `manifest.json` file under `/manifests/local` using the template you ha
     "resource": "api://{{HOSTNAME}}/00000000-0000-0000-0000-000000000000"
   },
   "developer": {
-    "name": "SOUTHWORKS",
+    "name": "Microsoft",
     "websiteUrl": "https://{{HOSTNAME}}/call/join",
     "privacyUrl": "https://{{HOSTNAME}}/privacy.html",
     "termsOfUseUrl": "https://{{HOSTNAME}}/tou.html"
   },
   "name": {
-    "short": "Broadcast Protocols",
-    "full": "Broadcast Protocols for Teams"
+    "short": "Broadcast Development Kit",
+    "full": "Broadcast Development Kit for Teams"
   },
   "description": {
-    "short": "Operate the Broadcast Protocols for Teams inside your teams meeting",
-    "full": "This extension allows you to use the Broadcast Protocols for Teams solution you have deployed for your Office 365 tenant directly within Teams"
+    "short": "Operate the Broadcast Development Kit for Teams inside your teams meeting",
+    "full": "This extension allows you to use the Broadcast Development Kit for Teams solution you have deployed for your Office 365 tenant directly within Teams"
   },
   "icons": {
     "outline": "icon-outline.png",
@@ -256,7 +219,7 @@ Finally, you can create the zip package with the files you have under `/manifest
 
 ### Upload your application to Teams
 
-[Create](https://support.microsoft.com/en-us/office/schedule-a-meeting-in-teams-943507a9-8583-4c58-b5d2-8ec8265e04e5) a new microsoft teams meeting and join. Once you are inside the meeting, click on the three dots button `( ... )` and then on `+ Add an app`.
+[Create](https://support.microsoft.com/en-us/office/schedule-a-meeting-in-teams-943507a9-8583-4c58-b5d2-8ec8265e04e5) a new Microsoft Teams meeting and join. Once you are inside the meeting, click on the three dots button `( ... )` and then on `+ Add an app`.
 
 |![`+` Add an app](images/add_an_app.png)|
 |:--:|
@@ -268,7 +231,7 @@ A pop up will open, select `Manage apps` in the bottom left corner of it.
 |:--:|
 |*Add an app pop up*|
 
-A new window will open, select `Upload a custom app` in the bottom right corner of it  and select the `local.zip` file we have created previously.
+A new window will open, select `Upload a custom app` in the bottom right corner of it  and select the `local.zip` file you have created previously.
 
 |![Upload a custom app](images/add_an_app_3.png)|
 |:--:|
@@ -313,7 +276,7 @@ After a few seconds, the bot will join into the meeting, and you will see dashbo
 |:--:|
 |*In meeting*|
 
-In the image below, we can see an SRT extraction of a meeting participant.
+In the image below, you can see an SRT extraction of a meeting participant.
 
 |![SRT extraction example](images/test_extension_3.png)|
 |:--:|
