@@ -15,12 +15,12 @@
     "termsOfUseUrl": ""
   },
   "name": {
-    "short": "Broadcast Protocols",
-    "full": "Broadcast Protocols for Teams"
+    "short": "Broadcast Development Kit",
+    "full": "Broadcast Development Kit for Teams"
   },
   "description": {
-    "short": "Operate the Broadcast Protocols for Teams inside your teams meeting",
-    "full": "This extension allows you to use the Broadcast Protocols for Teams solution you have deployed for your Office 365 tenant directly within Teams"
+    "short": "Operate the Broadcast Development Kit for Teams inside your teams meeting",
+    "full": "This extension allows you to use the Broadcast Development Kit for Teams solution you have deployed for your Office 365 tenant directly within Teams"
   },
   "icons": {
     "outline": "icon-outline.png",
@@ -45,6 +45,11 @@
   "bots": [],
   "connectors": [],
   "composeExtensions": [],
-  "permissions": ["identity", "messageTeamMembers"],
-  "validDomains": [""]
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    ""
+  ]
 }
