@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ActiveStatuses, CallState, InactiveStatuses, SpecialStreamTypes, StreamType } from '@/models/calls/types';
 import AppState from '@/stores/AppState';
 import { CallDetailsProps } from '@/views/producer/call-details/types';

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { applyMiddleware, combineReducers, createStore, AnyAction, CombinedState, Store } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { History } from 'history';

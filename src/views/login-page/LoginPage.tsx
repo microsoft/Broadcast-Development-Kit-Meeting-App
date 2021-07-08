@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React from "react";
 import { useSelector } from "react-redux";
 import { Button, Flex, Text } from "@fluentui/react-northstar";

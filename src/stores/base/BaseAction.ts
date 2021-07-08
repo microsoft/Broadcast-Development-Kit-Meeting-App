@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Action } from 'redux';
 import { RequestResponse } from '../../services/api';
 

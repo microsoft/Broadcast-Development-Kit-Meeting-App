@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React, { useEffect } from "react";
 import AppState from "@/stores/AppState";
 import { Flex, Loader } from "@fluentui/react-northstar";

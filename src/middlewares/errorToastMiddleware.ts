@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Middleware } from "redux";
 import AppState from "../stores/AppState";
 import { ToastStatusEnum } from "../stores/toast/reducer";

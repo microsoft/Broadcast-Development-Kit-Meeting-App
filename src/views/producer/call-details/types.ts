@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { InjectionStream, NewInjectionStream, NewStream, Stream, StreamProtocol } from "@/models/calls/types";
 
 export interface CallDetailsProps {

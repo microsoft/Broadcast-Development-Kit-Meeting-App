@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { BotService, ProvisioningStateValues } from "@/models/botService/types";
 import { CallService } from "@/services/CallService";
 import AppState from "@/stores/AppState";

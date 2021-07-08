@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React, { useEffect } from "react";
 import * as microsoftTeams from "@microsoft/teams-js";
 import { getHashParameters } from "@/services/helpers";

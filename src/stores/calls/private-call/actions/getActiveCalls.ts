@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ApiError } from "@/models/error/types";
 import { RequestResponse } from "@/services/api";
 import BaseAction, {

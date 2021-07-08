@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import BaseAction, { RequestFinishedActionParameters } from "@/stores/base/BaseAction";
 import { PrivateCall } from "../../../../models/calls/types";
 import { RequestResponse } from "../../../../services/api";

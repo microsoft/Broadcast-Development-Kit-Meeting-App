@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 export const extractLinks = (rawHTML: string): string[] => {
 
   const doc = document.createElement('html');

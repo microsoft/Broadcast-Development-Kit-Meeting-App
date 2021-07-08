@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { RequestResponse } from "@/services/api";
 import { InjectionStream } from "../../../../models/calls/types";
 import { ApiError } from "@/models/error/types";

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { PublicCall } from "@/models/calls/types";
 import { PollingSettings } from "@/models/global/types";
 import baseReducer from "@/stores/base/BaseReducer";

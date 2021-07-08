@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { AuthStatusCode } from "@/models/auth/types";
 import { setToken } from "@/services/api";
 import AppState from "@/stores/AppState";

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Context } from "@microsoft/teams-js";
 import BaseAction from "../base/BaseAction";
 import { DefaultError } from "../../models/error/types";

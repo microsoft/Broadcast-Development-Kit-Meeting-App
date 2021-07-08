@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ApiClient, Resource, RequestResponse} from "./api"
 import { BotService } from "@/models/botService/types";
 

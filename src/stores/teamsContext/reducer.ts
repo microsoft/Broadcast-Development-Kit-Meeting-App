@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Status, StatusCode } from "@/models/global/types";
 import { Context } from "@microsoft/teams-js";
 import { Reducer } from "redux";

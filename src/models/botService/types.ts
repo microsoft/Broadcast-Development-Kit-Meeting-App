@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 export enum BotServiceInfrastructureState {
   Running = "PowerState/running",
   Deallocating = "PowerState/deallocating",

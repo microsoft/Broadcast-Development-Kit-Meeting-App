@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 export interface Status<StatusCodeEnum>{
   code: StatusCodeEnum;
   message?: string;

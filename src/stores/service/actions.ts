@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import BaseAction, { RequestFinishedActionParameters } from "../base/BaseAction";
 import { RequestResponse, Resource } from "@/services/api";
 import { BotService, ProvisioningStateValues } from "@/models/botService/types";

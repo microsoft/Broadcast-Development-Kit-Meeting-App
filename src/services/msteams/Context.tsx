@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { Context } from "@microsoft/teams-js";
 
 const getContextPromise = (teamsClient: any, timeout = 10000): Promise<Context> => {

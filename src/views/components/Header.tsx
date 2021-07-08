@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useRouteMatch } from "react-router-dom";

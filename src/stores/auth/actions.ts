@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import BaseAction from "../base/BaseAction";
 import {
   AuthStatusCode,

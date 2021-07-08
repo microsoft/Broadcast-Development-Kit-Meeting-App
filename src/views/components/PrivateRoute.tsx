@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ATTENDEE_PATH } from "@/models/global/constants";
 import AppState from "@/stores/AppState";
 import React from "react";

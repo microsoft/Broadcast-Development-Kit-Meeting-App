@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 /*
  * Note: This reducer breaks convention on how reducers should be setup.
  */

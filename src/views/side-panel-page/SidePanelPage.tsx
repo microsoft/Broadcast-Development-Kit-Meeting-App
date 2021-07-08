@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { UserProfile, UserRoles } from "@/models/auth/types";
 import AppState from "@/stores/AppState";
 import * as React from "react";

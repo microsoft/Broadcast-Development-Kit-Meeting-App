@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { AuthConfig, UserRoles } from "@/models/auth/types";
 import jwtDecode from "jwt-decode";
 

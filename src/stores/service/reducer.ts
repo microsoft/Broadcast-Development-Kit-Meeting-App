@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { BotService, ProvisioningStateValues } from "@/models/botService/types";
 import { Reducer } from "redux";
 import * as ServiceActions from "./actions";

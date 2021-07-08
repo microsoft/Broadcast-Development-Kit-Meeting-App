@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { StatusCode } from "@/models/global/types";
 import AppState from "@/stores/AppState";
 import { Divider } from "@fluentui/react-northstar";
