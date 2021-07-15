@@ -1,6 +1,6 @@
-# Web UI for the Broadcast Development Kit
+# Teams App for the Broadcast Development Kit
 
-This repository contains a sample [application for Teams meetings](https://docs.microsoft.com/en-us/microsoftteams/platform/overview) to control the [Broadcast Development Kit](https://github.com/microsoft/Teams-Broadcast-Extension) solution. This application can be loaded into Teams as an in-meeting app to use within the Teams client. 
+This repository contains a sample [application for Teams meetings](https://docs.microsoft.com/en-us/microsoftteams/platform/overview) to control the [Broadcast Development Kit](https://github.com/microsoft/Broadcast-Development-Kit) solution. This application can be loaded into Teams as an in-meeting app to use within the Teams client. 
 
 This Teams app is developed as a single page application (SPA) in React and TypeScript.
 
@@ -15,7 +15,7 @@ The repository is structured in the following directories:
 - **docs**: Contains the documentation on the solution (TBC).
 
 ## Dependencies
-- This is not an standalone application. It requires an instance of the [Broadcast Development Kit](https://github.com/microsoft/Teams-Broadcast-Extension) to work with. Check the documentation in that repository to run the **Broadcast Development Kit** (either locally or in the cloud) before using this application.
+- This is not an standalone application. It requires an instance of the [Broadcast Development Kit](https://github.com/microsoft/Broadcast-Development-Kit) to work with. Check the documentation in that repository to run the **Broadcast Development Kit** (either locally or in the cloud) before using this application.
 - [Node JS and npm](docs/how-to-install-nodejs-and-npm/readme.md)
 - An Office 365 tenant and a team configured with Allow uploading custom apps enabled. For more information, see [prepare your Office 365 tenant](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant).
 

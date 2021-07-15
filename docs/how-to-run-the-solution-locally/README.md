@@ -14,7 +14,7 @@ To run the solution locally you need to establish a secure tunnel between Micros
 
 For this purpose, you use [ngrok](https://ngrok.com/), a reverse proxy software tool that creates a tunnel to our locally running web server's publicly available HTTPS endpoints.
 
-Because the frontend solution has a dependency with [Broadcasts Protocols for Teams](https://github.com/microsoft/Teams-Broadcast-Extension) (backend solution from here) that also requires Ngrok, and Ngrok's free accounts only allow us to run just one instance at the same time, we recommend you to create new account to get the required token to run an Ngrok instance. If you haven't downloaded Ngrok yet, you can donwload it from [here](https://www.ngrok.com/download)
+Because the frontend solution has a dependency with [Broadcasts Protocols for Teams](https://github.com/microsoft/Broadcast-Development-Kit) (backend solution from here) that also requires Ngrok, and Ngrok's free accounts only allow us to run just one instance at the same time, we recommend you to create new account to get the required token to run an Ngrok instance. If you haven't downloaded Ngrok yet, you can donwload it from [here](https://www.ngrok.com/download)
 
 Login into your new Ngrok account and in the left menu, in the `Getting Started` section, select the option `Your Authtoken` and copy it. We will use this token to configure our instance of ngrok.
 

@@ -34,7 +34,7 @@ API / Permission name  | Type | Admin consent
  profile | Delegated | No
  User.Read | Delegated | No
 
- Also add the following permission which is the API scope that had to be created when [configuring the backend](https://github.com/microsoft/Teams-Broadcast-Extension/blob/main/docs/how-to-run-the-solution-in-azure/app_registrations.md#expose-an-api-1) `ManagementApi` app registration.
+ Also add the following permission which is the API scope that had to be created when [configuring the backend](https://github.com/microsoft/Broadcast-Development-Kit/blob/main/docs/how-to-run-the-solution-in-azure/app_registrations.md#expose-an-api-1) `ManagementApi` app registration.
 
  API / Permission name  | Type | Admin consent
 ---------|----------|---------
@@ -43,7 +43,7 @@ API / Permission name  | Type | Admin consent
   - `Expose an API`: Skip this section for now. It will be configured later once the extension is ready to be used.
   - `App roles`: None.
 
-After creating this App Registration copy the app ID and modify the Manifest of the App Registration created to the [Management API](https://github.com/microsoft/Teams-Broadcast-Extension/blob/main/docs/how-to-run-the-solution-in-azure/app_registrations.md#how-to-setup-management-api-application-registration) adding the following property:
+After creating this App Registration copy the app ID and modify the Manifest of the App Registration created to the [Management API](https://github.com/microsoft/Broadcast-Development-Kit/blob/main/docs/how-to-run-the-solution-in-azure/app_registrations.md#how-to-setup-management-api-application-registration) adding the following property:
 
 ```json
 "knownClientApplications": ["{{applicationId}}"]
