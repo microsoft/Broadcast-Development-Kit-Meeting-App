@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 export enum StreamProtocol {
   SRT = 0,
-  RTMP = 1
+  RTMP = 1,
 }
 
 export enum CallState {
@@ -10,12 +10,12 @@ export enum CallState {
   Established,
   Terminating,
   Terminated,
-  Idle
+  Idle,
 }
 
 export enum CallType {
   Default,
-  Event
+  Event,
 }
 
 export interface ConnectionPool {
@@ -30,11 +30,14 @@ export enum StreamState {
   Stopping,
   StartingError,
   StoppingError,
-  Error
+  Error,
 }
 
 export const ActiveStatuses = [StreamState.Started, StreamState.Stopping];
-export const InactiveStatuses = [StreamState.Disconnected, StreamState.Starting];
+export const InactiveStatuses = [
+  StreamState.Disconnected,
+  StreamState.Starting,
+];
 
 export enum StreamType {
   VbSS,
@@ -46,7 +49,7 @@ export const SpecialStreamTypes = [StreamType.VbSS, StreamType.PrimarySpeaker];
 
 export enum StreamMode {
   Caller = 1,
-  Listener = 2
+  Listener = 2,
 }
 
 export interface CallContext {
@@ -54,7 +57,7 @@ export interface CallContext {
   privateContext: null | PrivateContext;
 }
 
-export interface PublicContext { }
+export interface PublicContext {}
 
 export interface PrivateContext {
   streamKey: string;
@@ -73,6 +76,7 @@ export interface PrivateCall {
   connectionPool: ConnectionPool;
   defaultProtocol: StreamProtocol;
   defaultPassphrase: string;
+  defaultKeyLength: KeyLength;
   defaultLatency: number;
   defaultMode: StreamMode;
   streams: Stream[];
@@ -122,6 +126,7 @@ export type StreamConfiguration = {
 };
 
 export interface StreamSrtConfiguration extends StreamConfiguration {
+  keyLength: KeyLength;
   mode: StreamMode;
   latency: number;
 }
@@ -136,6 +141,7 @@ export interface CallDefaults {
   protocol: StreamProtocol;
   latency: number;
   passphrase: string;
+  keyLength: KeyLength;
   mode: StreamMode;
 }
 
@@ -149,6 +155,7 @@ export interface NewStream {
     url?: string;
     latency?: number;
     passphrase?: string;
+    keyLength?: KeyLength;
     unmixedAudio: boolean;
   };
 }
@@ -158,6 +165,7 @@ export interface StreamDetails {
   passphrase: string;
   latency: number;
   previewUrl: string;
+  keyLength: KeyLength;
   audioDemuxed: boolean;
 }
 
@@ -175,6 +183,7 @@ export interface NewInjectionStream {
   mode?: StreamMode;
   latency?: number;
   enableSsl?: boolean;
+  keyLength? : KeyLength;
 }
 
 export interface InjectionStream {
@@ -191,6 +200,7 @@ export interface InjectionStream {
   latency: number;
   passphrase: string;
   audioMuted: boolean;
+  keyLength: KeyLength;
 }
 
 export interface PublicCall {
@@ -213,4 +223,11 @@ export interface NewInjectionStreamSettingsOpenParameters {
 export interface CallStreamKey {
   streamKey: string;
   callId: string;
+}
+
+export enum KeyLength {
+  None = 0,
+  SixteenBytes = 16,
+  TwentyFourBytes = 24,
+  ThirtyTwoBytes = 32,
 }

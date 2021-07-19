@@ -15,9 +15,15 @@ import { useHistory } from "react-router-dom";
 import AppState from "@/stores/AppState";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "@/hooks/useInput";
-import { CallDefaults, StreamMode, StreamProtocol } from "@/models/calls/types";
+import {
+  CallDefaults,
+  KeyLength,
+  StreamMode,
+  StreamProtocol,
+} from "@/models/calls/types";
 import { updateCallDefaults } from "@/stores/calls/private-call/actions";
 import { CALL_DETAILS_PATH } from "@/models/global/constants";
+import { useMemo } from "react";
 
 const protocols = Object.keys(StreamProtocol).filter(
   (i) => !isNaN(parseInt(i))
@@ -37,6 +43,7 @@ const CallSettings: React.FC = () => {
   //State
   const [mode, setMode] = useState(StreamMode.Listener);
   const [hasPassphraseError, setHasPassphraseError] = useState(false);
+  const [keyLength, setKeyLength] = useState(call?.defaultKeyLength ?? KeyLength.None);
 
   const defaultProtocol = call?.defaultProtocol ?? StreamProtocol.RTMP;
 
@@ -61,6 +68,17 @@ const CallSettings: React.FC = () => {
     bind: bindLatency,
   } = useInput("750", "750");
 
+  const KeyLengthValues = useMemo(() => Object.keys(KeyLength).filter(
+    (i) => !isNaN(parseInt(i))
+  ),[]);
+
+  const keyLengthOptions = useMemo(() => KeyLengthValues.map((k) => {
+    return {
+      key: parseInt(k),
+      header: k === "0" ? "no-key" : `${k} Bytes`,
+    };
+  }),[KeyLengthValues]);
+
   useEffect(() => {
     if (call) {
       setSelectedProtocol(StreamProtocol[call.defaultProtocol]);
@@ -80,7 +98,6 @@ const CallSettings: React.FC = () => {
   //Methods
   const redirectToMeetingDetails = () => {
     const path = `${CALL_DETAILS_PATH}${callId}`;
-    console.log(path);
     history.push(path);
   };
 
@@ -89,8 +106,6 @@ const CallSettings: React.FC = () => {
     setHasPassphraseError(false);
 
     // invoke an asyncAction that will update on API
-    console.log(selectedProtocol, passphrase, latency);
-
     const protocol =
       StreamProtocol[selectedProtocol as keyof typeof StreamProtocol];
 
@@ -108,10 +123,9 @@ const CallSettings: React.FC = () => {
       protocol: StreamProtocol[selectedProtocol as keyof typeof StreamProtocol],
       latency: protocol === StreamProtocol.SRT ? latency : 750,
       passphrase: protocol === StreamProtocol.SRT ? passphrase : "",
+      keyLength: passphrase ? keyLength : KeyLength.None,
       mode: mode,
     };
-
-    console.log(newDefaults);
 
     dispatch(
       updateCallDefaults({ callId, defaults: newDefaults as CallDefaults })
@@ -123,6 +137,12 @@ const CallSettings: React.FC = () => {
   const onClickCancelBtn = (event: unknown) => {
     redirectToMeetingDetails();
   };
+
+  const handleKeyLengthChange = (event: any, data: any) => {
+    setKeyLength(data.value.key);
+  }
+
+  const defaultKeyLength = keyLengthOptions.find(k => k.key === keyLength);
 
   return (
     <Flex column gap="gap.small">
@@ -191,6 +211,15 @@ const CallSettings: React.FC = () => {
                 />
               </FlexItem>
             )}
+            <Text content="Key Length" style={{marginBottom: '2px'}} />
+            <Dropdown
+              items={keyLengthOptions}
+              highlightFirstItemOnOpen={true}
+              defaultValue={defaultKeyLength}
+              checkable
+              disabled={!passphrase}
+              onChange={handleKeyLengthChange}
+            />
           </>
         )}
 

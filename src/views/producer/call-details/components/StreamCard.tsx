@@ -28,6 +28,7 @@ import {
 import {
   SpecialStreamTypes,
   Stream,
+  StreamProtocol,
   StreamState,
   StreamType,
 } from "@/models/calls/types";
@@ -41,11 +42,18 @@ interface StreamCardProps {
   stream: Stream;
   isPrimarySpeakerEnabled: boolean;
   isStageEnabled: boolean;
+  callProtocol: StreamProtocol;
 }
 
 const StreamCard: React.FC<StreamCardProps> = (props) => {
   const dispatch = useDispatch();
-  const { callId, stream, isPrimarySpeakerEnabled, isStageEnabled } = props;
+  const {
+    callId,
+    stream,
+    isPrimarySpeakerEnabled,
+    isStageEnabled,
+    callProtocol,
+  } = props;
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(!expanded);
@@ -68,10 +76,6 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
           console.error(error.raw);
           return;
         }
-
-        console.log({
-          response,
-        });
 
         const urlCreator = window.URL || window.webkitURL;
         const imageUrl = urlCreator.createObjectURL(response);
@@ -117,6 +121,18 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
     }
   };
 
+  const getPassphraseDisplayValue = (): string => {
+    if (stream.details?.passphrase) {
+      return showPassphrase ? `${stream.details?.passphrase} ` : "******** ";
+    }
+
+    return "None";
+  };
+
+  const isSrt = callProtocol === StreamProtocol.SRT;
+  const isStreamTypeSpecial = SpecialStreamTypes.includes(stream.type);
+  const isStreamOperationEnabled = streamOperationEnabled();
+
   return (
     <Flex>
       <Card
@@ -137,7 +153,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
             <Avatar image={avatartImage} name={stream.displayName}></Avatar>
             <Flex column>
               <Text style={{ marginBottom: "0px" }}>{stream.displayName}</Text>
-              {!SpecialStreamTypes.includes(stream.type) && (
+              {!isStreamTypeSpecial && (
                 <Flex
                   style={{ marginTop: "4px" }}
                   vAlign="center"
@@ -169,7 +185,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
               }
               iconOnly
               onClick={toggleStreamOperation}
-              disabled={!streamOperationEnabled()}
+              disabled={!isStreamOperationEnabled}
             />
 
             <Button
@@ -192,7 +208,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
             <Flex column>
               <Text size="large" weight="bold" content={stream.displayName} />
 
-              {!SpecialStreamTypes.includes(stream.type) && (
+              {!isStreamTypeSpecial && (
                 <Flex
                   vAlign="center"
                   gap="gap.small"
@@ -223,7 +239,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
           <Flex>
             <Button
               onClick={toggleStreamOperation}
-              disabled={!streamOperationEnabled()}
+              disabled={!isStreamOperationEnabled}
             >
               <CallRecordingIcon
                 style={{
@@ -258,27 +274,33 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
                 </Button>
               </Text>
 
-              <Text weight="bold" content="Passphrase:" />
+              <Text
+                weight="bold"
+                content={isSrt ? "Passphrase: " : "Stream Key: "}
+              />
 
               <Text>
-                {showPassphrase ? stream.details?.passphrase : "********"}{" "}
-                <Button circular iconOnly onClick={toggleShowPassphrase}>
-                  {showPassphrase ? <EyeSlashIcon /> : <EyeIcon />}
-                </Button>{" "}
-                <Button circular iconOnly>
-                  <CopyToClipboard text={stream.details?.passphrase}>
-                    <ClipboardCopiedToIcon />
-                  </CopyToClipboard>
-                </Button>
+                {getPassphraseDisplayValue()}
+                {stream.details?.passphrase && (
+                  <>
+                    <Button circular iconOnly onClick={toggleShowPassphrase}>
+                      {showPassphrase ? <EyeSlashIcon /> : <EyeIcon />}
+                    </Button>{" "}
+                    <Button circular iconOnly>
+                      <CopyToClipboard text={stream.details?.passphrase}>
+                        <ClipboardCopiedToIcon />
+                      </CopyToClipboard>
+                    </Button>
+                  </>
+                )}
               </Text>
 
-              <Text weight="bold" content="Audio Stream:" />
-
-              <Text>Muxed</Text>
-
-              <Text weight="bold" content="Latency:" />
-
-              <Text>{`${stream.details?.latency}ms`}</Text>
+              {isSrt && (
+                <>
+                  <Text weight="bold" content="Latency:" />
+                  <Text>{`${stream.details?.latency}ms`}</Text>
+                </>
+              )}
             </Flex>
           )}
         </Flex>

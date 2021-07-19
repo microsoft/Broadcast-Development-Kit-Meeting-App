@@ -30,17 +30,10 @@ export const loadUserProfile =
     const isAuthEnabled = !(disableAuthFlag && disableAuthFlag.isActive);
 
     try {
-      console.log({
-        isAuthEnabled
-      });
-
       const userRole = isAuthEnabled
         ? await getUserRole(teamsClient, config?.authConfig?.groupId)
         : defaultRole;
 
-      console.log({
-        userRole
-      })
       const role = userRole === UserRoles.Attendee ? userRole : null;
       const accessedAs = isAuthEnabled ? role : defaultRole;
       const context = getState().teamsContext.values;

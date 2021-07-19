@@ -20,6 +20,7 @@ const CallDetails: React.FC = () => {
   const callDetailsProps = useSelector((state: AppState) =>
     selectCallDetailsProps(state)
   );
+
   const {
     callId,
     isPrimarySpeakerEnabled,
@@ -34,6 +35,7 @@ const CallDetails: React.FC = () => {
     isPollingEnabled,
     pollingTime,
     meetingId,
+    callProtocol,
   } = callDetailsProps;
 
   useInterval(
@@ -126,6 +128,7 @@ const CallDetails: React.FC = () => {
                               stream={stream}
                               isPrimarySpeakerEnabled={isPrimarySpeakerEnabled}
                               isStageEnabled={isStageEnabled}
+                              callProtocol={callProtocol}
                             />
                           ))
                         ) : (

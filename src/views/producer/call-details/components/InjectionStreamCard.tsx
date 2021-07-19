@@ -51,7 +51,6 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
   const [botMuted, setBotMuted] = useState(false);
-  const injectionUrl = stream ? getInjectionUrl(stream) : "";
 
   const muteBotAudio = () => {
     dispatch(muteBotAsync(callId));
@@ -97,7 +96,17 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
     }
   };
 
+  const getInjectionUrl = (stream: InjectionStream): string => {
+    if (stream.protocol === StreamProtocol.RTMP && stream.injectionUrl) {
+      return stream.injectionUrl.replace(stream.passphrase, OBFUSCATION_PATTERN);
+    }
+
+    return stream.injectionUrl ?? "";
+  };
+
+  const injectionUrl = stream ? getInjectionUrl(stream) : "";
   const displayName = "Injection Stream";
+
   return (
     <Flex>
       <Card
@@ -231,7 +240,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
               <Text weight="bold" content="Stream URL:" />
 
-              <Text>
+              <Text style={{overflowWrap: 'break-word'}}>
                 {injectionUrl}{" "}
                 <Button circular iconOnly>
                   <CopyToClipboard text={stream?.injectionUrl}>
@@ -286,19 +295,6 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
       </Card>
     </Flex>
   );
-};
-
-const getInjectionUrl = (stream: InjectionStream): string => {
-  if (stream.protocol === StreamProtocol.RTMP && stream.injectionUrl) {
-    let rtmpUrl = stream.injectionUrl.replace(
-      stream.passphrase,
-      OBFUSCATION_PATTERN
-    );
-
-    return rtmpUrl;
-  }
-
-  return stream.injectionUrl ?? "";
 };
 
 export default InjectionStreamCard;

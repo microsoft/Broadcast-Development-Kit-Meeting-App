@@ -34,11 +34,6 @@ const Producer: React.FC = () => {
     dispatch(getCallByMeetingIdAsync(meetingId));
   }, []);
 
-  console.log({
-    hasCallInProgress: hasCallInProgress,
-    activeCall: activeCall,
-  })
-  
   useEffect(() => {
     if (activeCall && hasCallInProgress) {
       dispatch(togglePolling(true));

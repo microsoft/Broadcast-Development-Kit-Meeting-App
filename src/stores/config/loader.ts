@@ -8,7 +8,7 @@ const loader = new Promise<Config>((resolve, reject) => {
   Axios.get("/config.json")
     .then((o) => resolve(o.data as Config))
     .catch((err) => {
-      console.log("Error loading config:", err);
+      console.error("Error loading config:", err);
       const errorResponse = new DefaultError("Error loading config", err);
 
       reject(errorResponse);

@@ -16,4 +16,5 @@ export interface CallDetailsProps {
   isPollingEnabled: boolean;
   pollingTime: number;
   meetingId: string;
+  callProtocol: StreamProtocol;
 }

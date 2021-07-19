@@ -15,6 +15,7 @@ import {
   StreamProtocol,
   CallType,
   StreamMode,
+  KeyLength,
 } from "@/models/calls/types";
 import AppState from "@/stores/AppState";
 import { PrivateCall } from "@/models/calls/types";
@@ -91,6 +92,7 @@ const CALL_INITIALIZING_PLACEHOLDER: PrivateCall = {
   defaultProtocol: StreamProtocol.SRT,
   defaultLatency: 0,
   defaultPassphrase: "",
+  defaultKeyLength: KeyLength.None,
   defaultMode: StreamMode.Listener,
   errorMessage: null,
   joinUrl: "",

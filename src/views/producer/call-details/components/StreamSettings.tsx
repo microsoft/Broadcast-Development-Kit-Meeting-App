@@ -13,9 +13,11 @@ import {
   Input,
   Checkbox,
   Button,
+  Dropdown,
 } from "@fluentui/react-northstar";
 import { closeNewStreamSettings } from "@/stores/calls/private-call/actions/newStreamSettings";
 import {
+  KeyLength,
   StartStreamRequest,
   StreamConfiguration,
   StreamMode,
@@ -25,6 +27,7 @@ import {
 } from "@/models/calls/types";
 import { startStreamAsync } from "@/stores/calls/private-call/asyncActions";
 import { useEffect } from "react";
+import { useMemo } from "react";
 
 interface SettingsState {
   protocol?: StreamProtocol;
@@ -33,6 +36,7 @@ interface SettingsState {
   mode?: StreamMode;
   port?: string;
   passphrase?: string;
+  keyLength?: KeyLength;
   latency?: number;
   followSpeakerAudio?: boolean;
   unmixedAudio?: boolean;
@@ -59,7 +63,16 @@ const StreamSettings: React.FC = () => {
     { hasPassphraseError: false }
   );
 
-  const visible = !!newStream;
+  const KeyLengthValues = useMemo(() => Object.keys(KeyLength).filter(
+    (i) => !isNaN(parseInt(i))
+  ),[]);
+
+  const keyLengthOptions = useMemo(() => KeyLengthValues.map((k) => {
+    return {
+      key: parseInt(k),
+      header: k === "0" ? "no-key" : `${k} Bytes`,
+    };
+  }),[KeyLengthValues]);
 
   const loadDefaultSettings = () => {
     const protocol = activeCall?.defaultProtocol || StreamProtocol.SRT;
@@ -67,7 +80,8 @@ const StreamSettings: React.FC = () => {
       protocol === StreamProtocol.SRT ? activeCall?.defaultPassphrase : "";
     const latency = activeCall?.defaultLatency;
     const url = "";
-    const mode = newStream?.mode;
+    const mode = activeCall?.defaultMode || newStream?.mode;
+    const keyLength = activeCall?.defaultKeyLength || KeyLength.None;
     const unmixedAudio = newStream?.advancedSettings.unmixedAudio;
     const audioFormat = 0;
     const timeOverlay = true;
@@ -75,6 +89,7 @@ const StreamSettings: React.FC = () => {
     setState({
       protocol,
       passphrase,
+      keyLength,
       latency,
       url,
       mode,
@@ -84,9 +99,14 @@ const StreamSettings: React.FC = () => {
     });
   };
 
-  const handleLatencyChange = (value?: ReactText) => {
-    const latency = parseInt(value?.toString() ?? "0", 10);
-    setState({ latency: latency });
+  const handleLatencyChange = (event, data) =>
+    setState({ latency: parseInt(data?.value || "0", 10) });
+
+  const handleAudioFormatChange = (event, data) => {
+    setState({ audioFormat: data.value });
+  };
+  const handleKeyLengthChange = (event, data) => {
+    setState({ keyLength: data.value.key });
   };
 
   const handleClose = () => {
@@ -140,10 +160,6 @@ const StreamSettings: React.FC = () => {
     ];
   };
 
-  const handleAudioFormatChange = (e, data) => {
-    setState({ audioFormat: data.value });
-  };
-
   const getStreamConfiguration = (state: SettingsState) => {
     switch (state.protocol) {
       case StreamProtocol.SRT:
@@ -151,6 +167,7 @@ const StreamSettings: React.FC = () => {
           mode: state.mode,
           latency: state.latency,
           streamKey: state.passphrase,
+          keyLength: state.keyLength,
           streamUrl: state.url,
           unmixedAudio: state.unmixedAudio,
           audioFormat: state.audioFormat,
@@ -172,6 +189,10 @@ const StreamSettings: React.FC = () => {
   useEffect(() => {
     loadDefaultSettings();
   }, []);
+
+  const defaultKeyLength = keyLengthOptions.find(
+    (k) => k.key === state.keyLength
+  );
 
   return (
     <Flex gap="gap.small" column>
@@ -248,9 +269,7 @@ const StreamSettings: React.FC = () => {
               type="number"
               defaultValue="50"
               value={state.latency}
-              onChange={(event, data) =>
-                setState({ latency: parseInt(data?.value || "0", 10) })
-              }
+              onChange={handleLatencyChange}
               fluid
             />
             <Input
@@ -269,6 +288,15 @@ const StreamSettings: React.FC = () => {
                 />
               </FlexItem>
             )}
+            <Text content="Key Length" style={{ marginBottom: "2px" }} />
+            <Dropdown
+              items={keyLengthOptions}
+              highlightFirstItemOnOpen={true}
+              defaultValue={defaultKeyLength}
+              checkable
+              disabled={!state.passphrase}
+              onChange={handleKeyLengthChange}
+            />
           </Flex>
         )}
         Audio Format

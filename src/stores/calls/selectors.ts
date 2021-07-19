@@ -17,7 +17,7 @@ function _selectCallDetailsProps(callState: PrivateCallState, contextState: Team
 
  if(!call){
    return {
-    callId: '', 
+    callId: '',
     isStreamSettingsEnabled: newStream !== null,
     isInjectionStreamSettingsEnabled: newInjectionStream !== null,
     isPrimarySpeakerEnabled: false,
@@ -30,6 +30,7 @@ function _selectCallDetailsProps(callState: PrivateCallState, contextState: Team
     isPollingEnabled,
     pollingTime,
     meetingId,
+    callProtocol: 0
    }
  }
 
@@ -56,5 +57,6 @@ function _selectCallDetailsProps(callState: PrivateCallState, contextState: Team
   ),
   activeStreams: call.streams.filter((o) => ActiveStatuses.includes(o.state)),
   injectionStream: call.injectionStream,
+  callProtocol: call.defaultProtocol
  }
 }

@@ -16,11 +16,13 @@ import {
   EyeIcon,
   EyeSlashIcon,
   ClipboardCopiedToIcon,
+  Dropdown,
 } from "@fluentui/react-northstar";
 import {
   NewInjectionStream,
   StreamMode,
   StreamProtocol,
+  KeyLength,
 } from "@/models/calls/types";
 import {
   refreshStreamKeyAsync,
@@ -28,6 +30,7 @@ import {
 } from "@/stores/calls/private-call/asyncActions";
 import { closeNewInjectionStreamSettings } from "@/stores/calls/private-call/actions";
 import { PrivateCall } from "@/models/calls/types";
+import { useMemo } from "react";
 
 interface SettingsState {
   protocol?: StreamProtocol;
@@ -36,6 +39,7 @@ interface SettingsState {
   latency?: number;
   passphrase?: string;
   enableSsl?: boolean;
+  keyLength?: KeyLength;
 }
 
 const DEFAULT_LATENCY = 750;
@@ -60,11 +64,19 @@ const InjectionStreamSettings: React.FC = () => {
     {}
   );
 
-  const visible = !!newStream;
-  const rtmpPushStreamKey = activeCall?.privateContext?.streamKey ?? "";
-  const rtmpPushStreamUrl = getRtmpPushStreamUrl(
-    activeCall!,
-    !!state.enableSsl
+  const KeyLengthValues = useMemo(() => Object.keys(KeyLength).filter(
+    (i) => !isNaN(parseInt(i))
+  ),[]);
+
+  const keyLengthOptions = useMemo(() => KeyLengthValues.map((k) => {
+    return {
+      key: parseInt(k),
+      header: k === "0" ? "no-key" : `${k} Bytes`,
+    };
+  }),[KeyLengthValues]);
+
+  const defaultKeyLength = keyLengthOptions.find(
+    (k) => k.key === state.keyLength
   );
 
   const loadDefaultSettings = () => {
@@ -72,7 +84,8 @@ const InjectionStreamSettings: React.FC = () => {
     const streamMode = newStream?.mode || StreamMode.Caller;
     const latency = newStream?.latency || DEFAULT_LATENCY;
     const enableSsl = !!newStream?.enableSsl;
-    setState({ protocol, streamMode, latency, enableSsl });
+    const keyLength = newStream?.keyLength || KeyLength.None;
+    setState({ protocol, streamMode, latency, enableSsl, keyLength });
   };
 
   const handleClose = () => {
@@ -95,14 +108,38 @@ const InjectionStreamSettings: React.FC = () => {
       mode: state.streamMode || StreamMode.Caller,
       latency: state.latency,
       enableSsl: state.enableSsl,
+      keyLength: state.keyLength || KeyLength.None,
     };
 
     dispatch(startInjectionAsync(newInjectionStream));
   };
 
+  const handleKeyLengthChange = (event, data) => {
+    setState({ keyLength: data.value.key });
+  };
+
+  const getRtmpPushStreamUrl = (
+    call: PrivateCall | null | undefined,
+    enableSsl: boolean
+  ): string => {
+    const protocol = enableSsl ? "rtmps" : "rtmp";
+    const port = enableSsl ? 2936 : 1936;
+    const ingest = enableSsl ? "secure-ingest" : "ingest";
+
+    if (call && call.botFqdn) {
+      const domain = call.botFqdn.split(":")[0];
+      return `${protocol}://${domain}:${port}/${ingest}/${OBFUSCATION_PATTERN}?callId=${call.id}`;
+    }
+
+    return "";
+  };
+
   useEffect(() => {
     loadDefaultSettings();
   }, []);
+
+  const rtmpPushStreamKey = activeCall?.privateContext?.streamKey ?? "";
+  const rtmpPushStreamUrl = getRtmpPushStreamUrl(activeCall, !!state.enableSsl);
 
   return (
     <Flex gap="gap.small" column>
@@ -250,6 +287,17 @@ const InjectionStreamSettings: React.FC = () => {
                 }
                 fluid
               />
+              <>
+                <Text content="Key Length" style={{ marginBottom: "2px" }} />
+                <Dropdown
+                  items={keyLengthOptions}
+                  highlightFirstItemOnOpen={true}
+                  defaultValue={defaultKeyLength}
+                  disabled={!state.passphrase}
+                  checkable
+                  onChange={handleKeyLengthChange}
+                />
+              </>
             </>
           )}
         </Flex>
@@ -271,26 +319,6 @@ const InjectionStreamSettings: React.FC = () => {
       </Form>
     </Flex>
   );
-};
-
-const getRtmpPushStreamUrl = (
-  call: PrivateCall,
-  enableSsl: boolean
-): string => {
-  let protocol = "rtmp";
-  let port = 1936;
-
-  if (enableSsl) {
-    protocol = "rtmps";
-    port = 2936;
-  }
-
-  if (call && call.botFqdn) {
-    const domain = call.botFqdn.split(":")[0];
-    return `${protocol}://${domain}:${port}/${OBFUSCATION_PATTERN}?callId=${call?.id}`;
-  }
-
-  return "";
 };
 
 export default InjectionStreamSettings;

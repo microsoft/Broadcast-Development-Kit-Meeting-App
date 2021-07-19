@@ -52,7 +52,7 @@ export const joinCallAsync =
   (meetingUrl: string): ThunkAction<void, AppState, undefined, AnyAction> =>
   async (dispatch, getState) => {
     dispatch(requestJoinCall(meetingUrl));
-    
+
     const joinCallResponse = await CallService.initializeCall(meetingUrl);
 
     dispatch(requestJoinCallFinished({ payload: joinCallResponse }));
@@ -107,6 +107,7 @@ export const startStreamAsync =
         participantId: stream.id,
         participantGraphId: stream.participantGraphId,
         protocol: request.protocol,
+        keyLength: (request.config as StreamSrtConfiguration).keyLength,
         latency: (request.config as StreamSrtConfiguration).latency,
         mode: (request.config as StreamSrtConfiguration).mode,
         streamUrl: request.config.streamUrl || null,
@@ -179,6 +180,7 @@ export const startInjectionAsync =
     mode,
     latency,
     enableSsl,
+    keyLength
   }: NewInjectionStream): ThunkAction<void, AppState, undefined, AnyAction> =>
   async (dispatch, getState) => {
     // TODO: Review this action dispatch(injectionRequestCancelled());
@@ -195,6 +197,7 @@ export const startInjectionAsync =
         mode,
         latency,
         enableSsl,
+        keyLength,
       },
     });
 
