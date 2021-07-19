@@ -1,4 +1,6 @@
-> NOTICE: This is a PRE-RELEASE project and is still in development. The code in this repository is provided "AS IS", without any warranty of any kind. Check the [LICENSE](LICENSE) for more information.
+# Notice
+
+This is a PRE-RELEASE project and is still in development. The code in this repository is provided "AS IS", without any warranty of any kind. Check the [LICENSE](LICENSE) for more information.
 
 # Teams App for the Broadcast Development Kit
 
@@ -53,12 +55,12 @@ This project may contain trademarks or logos for projects, products, or services
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
 
+## Acknowledgments
+
+The architecture used in this solution was inspired by the sample in [codeBelt/react-redux-architecture](https://github.com/codeBelt/react-redux-architecture).
+
 ## License
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
 Licensed under the [MIT](LICENSE) license.
-
-## Acknowledgments
-
-The architecture used in this solution was inspired by the sample in [codeBelt/react-redux-architecture](https://github.com/codeBelt/react-redux-architecture).
