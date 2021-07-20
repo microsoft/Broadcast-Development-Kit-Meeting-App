@@ -64,7 +64,7 @@ const JoinCall: React.FC = () => {
           hAlign="center"
         >
           <Text style={{ marginBottom: "8px" }} align="center">
-            Press the button below to bring Broadcaster for Teams into the
+            Press the button below to bring Broadcast Development Kit for Teams into the
             meeting
           </Text>
 
