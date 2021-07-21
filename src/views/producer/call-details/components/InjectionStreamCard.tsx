@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import {
@@ -33,6 +33,8 @@ import {
   unmuteBotAsync,
 } from "@/stores/calls/private-call/asyncActions";
 import { openNewInjectionStreamSettings } from "@/stores/calls/private-call/actions/newInjectionStreamSettings";
+import AppState from "@/stores/AppState";
+import { addCallActiveCard, removeCallActiveCard } from "@/stores/ui/actions";
 
 interface InjectionCardProps {
   stream: InjectionStream | null;
@@ -46,11 +48,18 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
   const { stream, callId } = props;
 
-  const [expanded, setExpanded] = useState(false);
-  const toggleExpanded = () => setExpanded(!expanded);
+  const displayName = "Injection Stream";
+  const expanded = useSelector((state: AppState) => state.ui.activeCards.includes(displayName));
+
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
   const [botMuted, setBotMuted] = useState(false);
+
+  const toggleExpanded = () => {
+    expanded
+      ? dispatch(removeCallActiveCard(displayName))
+      : dispatch(addCallActiveCard([displayName]));
+  }
 
   const muteBotAudio = () => {
     dispatch(muteBotAsync(callId));
@@ -105,7 +114,6 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   };
 
   const injectionUrl = stream ? getInjectionUrl(stream) : "";
-  const displayName = "Injection Stream";
 
   return (
     <Flex>

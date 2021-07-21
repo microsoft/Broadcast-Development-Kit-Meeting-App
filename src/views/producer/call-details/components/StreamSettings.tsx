@@ -28,6 +28,7 @@ import {
 import { startStreamAsync } from "@/stores/calls/private-call/asyncActions";
 import { useEffect } from "react";
 import { useMemo } from "react";
+import { removeCallActiveCard } from "@/stores/ui/actions";
 
 interface SettingsState {
   protocol?: StreamProtocol;
@@ -116,6 +117,10 @@ const StreamSettings: React.FC = () => {
   const handleSave = () => {
     if (!newStream) {
       return;
+    }
+
+    if (newStream.participantId){
+      dispatch(removeCallActiveCard(newStream.participantId));
     }
 
     setState({ hasPassphraseError: false });

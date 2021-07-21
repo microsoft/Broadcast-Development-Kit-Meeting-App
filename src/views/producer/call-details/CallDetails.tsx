@@ -14,12 +14,29 @@ import StreamSettings from "./components/StreamSettings";
 import StreamCard from "./components/StreamCard";
 import BotServiceStatus from "@/views/components/bot-service/BotServiceStatus";
 import "./CallDetails.css";
+import {
+  addCallActiveSection,
+  removeCallActiveSection,
+} from "@/stores/ui/actions";
 
 const CallDetails: React.FC = () => {
   const dispatch = useDispatch();
+
   const callDetailsProps = useSelector((state: AppState) =>
     selectCallDetailsProps(state)
   );
+
+  const activeSections = useSelector(
+    (state: AppState) => state.ui.callDetailsActiveSections
+  );
+
+  const toggleActiveSection = (event: any, data: any) => {
+    const sectionIndex = data.index;
+    const isSectionActived = activeSections.includes(sectionIndex);
+    isSectionActived
+      ? dispatch(removeCallActiveSection(sectionIndex))
+      : dispatch(addCallActiveSection([sectionIndex]));
+  };
 
   const {
     callId,
@@ -97,7 +114,8 @@ const CallDetails: React.FC = () => {
             {isInjectionStreamSettingsEnabled && <InjectionStreamSettings />}
             {!isAnyStreamEnabled && (
               <Accordion
-                defaultActiveIndex={[0, 1, 2]}
+                onTitleClick={toggleActiveSection}
+                defaultActiveIndex={activeSections}
                 panels={[
                   {
                     title: "Injection Stream",
