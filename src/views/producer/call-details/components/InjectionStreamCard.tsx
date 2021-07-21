@@ -33,36 +33,30 @@ import {
   unmuteBotAsync,
 } from "@/stores/calls/private-call/asyncActions";
 import { openNewInjectionStreamSettings } from "@/stores/calls/private-call/actions/newInjectionStreamSettings";
-import AppState from "@/stores/AppState";
 
 interface InjectionCardProps {
   stream: InjectionStream | null;
   callId: string;
+  isBotMuted: boolean;
 }
 
 const OBFUSCATION_PATTERN = "********";
 
 const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   const dispatch = useDispatch();
-  const activeMute = useSelector(
-    (state: AppState) => state.privateCall.activeInjectionMute
-  );
-  const { stream, callId } = props;
+  const { stream, callId, isBotMuted } = props;
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(!expanded);
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
-  const [botMuted, setBotMuted] = useState(activeMute ?? false);
 
   const muteBotAudio = () => {
     dispatch(muteBotAsync(callId));
-    setBotMuted(true);
   };
 
   const unmuteBotAudio = () => {
     dispatch(unmuteBotAsync(callId));
-    setBotMuted(false);
   };
 
   const toggleStreamOperation = () => {
@@ -138,7 +132,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
           </Flex>
 
           <Flex vAlign="center" gap="gap.smaller">
-            {botMuted && (
+            {isBotMuted && (
               <Button
                 circular
                 icon={<MicOffIcon />}
@@ -146,7 +140,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
                 onClick={unmuteBotAudio}
               />
             )}
-            {!botMuted && (
+            {!isBotMuted && (
               <Button
                 circular
                 icon={<MicIcon />}
@@ -199,10 +193,10 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
           <Flex column hAlign="start" gap="gap.smaller">
             <Button
-              onClick={botMuted ? unmuteBotAudio : muteBotAudio}
+              onClick={isBotMuted ? unmuteBotAudio : muteBotAudio}
               style={{ minWidth: "115px" }}
             >
-              {botMuted ? (
+              {isBotMuted ? (
                 <MicOffIcon
                   style={{
                     marginRight: "0.25rem",
@@ -215,7 +209,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
                   }}
                 />
               )}
-              <Text content={!botMuted ? "Mute" : "Unmute"} />
+              <Text content={!isBotMuted ? "Mute" : "Unmute"} />
             </Button>
             <Button
               onClick={toggleStreamOperation}

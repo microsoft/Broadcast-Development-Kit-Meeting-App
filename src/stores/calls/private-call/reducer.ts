@@ -29,7 +29,7 @@ export type PrivateCallState = {
   newCall: null | NewCall;
   newStream: null | NewStream;
   newInjectionStream: null | NewInjectionStream;
-  activeInjectionMute: boolean;
+  isBotMuted: boolean;
   activeCallsLoading: boolean;
   activeCallsError: null | string;
 } & PollingSettings;
@@ -46,7 +46,7 @@ export const INITIAL_STATE: PrivateCallState = {
   activeCallsLoading: false,
   activeCallsError: null,
   isPollingEnabled: false,
-  activeInjectionMute: false,
+  isBotMuted: false,
   pollingTime: PRODUCER_DEFAULT_POLLING_TIME,
 };
 
@@ -302,7 +302,7 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
 
     return {
       ...state,
-      activeInjectionMute: true,
+      isBotMuted: true,
     };
   },
   [PrivateCallsActions.REQUEST_UNMUTE_BOT_FINISHED](
@@ -316,7 +316,7 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
 
     return {
       ...state,
-      activeInjectionMute: false,
+      isBotMuted: false,
     };
   },
 });

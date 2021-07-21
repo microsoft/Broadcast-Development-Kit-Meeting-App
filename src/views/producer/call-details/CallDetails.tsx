@@ -36,6 +36,7 @@ const CallDetails: React.FC = () => {
     pollingTime,
     meetingId,
     callProtocol,
+    isBotMuted
   } = callDetailsProps;
 
   useInterval(
@@ -107,6 +108,7 @@ const CallDetails: React.FC = () => {
                           key={"injection-stream"}
                           callId={callId}
                           stream={injectionStream}
+                          isBotMuted={isBotMuted}
                         />
                       ),
                       key: `content-${"Injection Stream"}`,

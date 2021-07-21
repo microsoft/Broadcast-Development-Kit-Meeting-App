@@ -12,7 +12,7 @@ export const selectCallDetailsProps = createSelector((state: AppState)=> state.p
 _selectCallDetailsProps);
 
 function _selectCallDetailsProps(callState: PrivateCallState, contextState: TeamsContextState ): CallDetailsProps{
- const { activeCall: call, newStream, newInjectionStream, isPollingEnabled, pollingTime} = callState;
+ const { activeCall: call, newStream, newInjectionStream, isPollingEnabled, pollingTime, isBotMuted} = callState;
  const meetingId = contextState.values?.meetingId || '';
 
  if(!call){
@@ -30,7 +30,8 @@ function _selectCallDetailsProps(callState: PrivateCallState, contextState: Team
     isPollingEnabled,
     pollingTime,
     meetingId,
-    callProtocol: 0
+    callProtocol: 0,
+    isBotMuted: false
    }
  }
 
@@ -57,6 +58,7 @@ function _selectCallDetailsProps(callState: PrivateCallState, contextState: Team
   ),
   activeStreams: call.streams.filter((o) => ActiveStatuses.includes(o.state)),
   injectionStream: call.injectionStream,
-  callProtocol: call.defaultProtocol
+  callProtocol: call.defaultProtocol,
+  isBotMuted: isBotMuted
  }
 }
