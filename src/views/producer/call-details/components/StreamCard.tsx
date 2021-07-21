@@ -57,13 +57,13 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
     callProtocol,
   } = props;
 
-  const expanded = useSelector((state: AppState) => state.ui.activeCards.includes(stream.id));
+  const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(stream.id));
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
   const [avatartImage, setAvatartImage] = useState("");
 
   const toggleExpanded = () => {
-    expanded
+    isExpanded
       ? dispatch(removeCallActiveCard(stream.id))
       : dispatch(addCallActiveCard([stream.id]));
   }
@@ -155,7 +155,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
         <Flex
           vAlign="center"
           space="between"
-          style={{ display: !expanded ? "flex" : "none" }}
+          style={{ display: !isExpanded ? "flex" : "none" }}
         >
           <Flex vAlign="center" gap="gap.small">
             <Avatar image={avatartImage} name={stream.displayName}></Avatar>
@@ -208,7 +208,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
         {/* Expanded view */}
         <Flex
-          style={{ display: expanded ? "flex" : "none" }}
+          style={{ display: isExpanded ? "flex" : "none" }}
           gap="gap.smaller"
           column
         >

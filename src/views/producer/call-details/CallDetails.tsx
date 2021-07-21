@@ -26,14 +26,14 @@ const CallDetails: React.FC = () => {
     selectCallDetailsProps(state)
   );
 
-  const activeSections = useSelector(
-    (state: AppState) => state.ui.activeSections
+  const expandedSections = useSelector(
+    (state: AppState) => state.ui.expandedSections
   );
 
-  const toggleActiveSection = (event: any, data: any) => {
+  const toggleExpandedSection = (event: any, data: any) => {
     const sectionIndex = data.index;
-    const isSectionActived = activeSections.includes(sectionIndex);
-    isSectionActived
+    const isSectionExpanded = expandedSections.includes(sectionIndex);
+    isSectionExpanded
       ? dispatch(removeCallActiveSection(sectionIndex))
       : dispatch(addCallActiveSection([sectionIndex]));
   };
@@ -114,8 +114,8 @@ const CallDetails: React.FC = () => {
             {isInjectionStreamSettingsEnabled && <InjectionStreamSettings />}
             {!isAnyStreamEnabled && (
               <Accordion
-                onTitleClick={toggleActiveSection}
-                defaultActiveIndex={activeSections}
+                onTitleClick={toggleExpandedSection}
+                defaultActiveIndex={expandedSections}
                 panels={[
                   {
                     title: "Injection Stream",

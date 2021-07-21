@@ -49,14 +49,14 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   const { stream, callId } = props;
 
   const displayName = "Injection Stream";
-  const expanded = useSelector((state: AppState) => state.ui.activeCards.includes(displayName));
+  const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(displayName));
 
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
   const [botMuted, setBotMuted] = useState(false);
 
   const toggleExpanded = () => {
-    expanded
+    isExpanded
       ? dispatch(removeCallActiveCard(displayName))
       : dispatch(addCallActiveCard([displayName]));
   }
@@ -130,7 +130,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
         <Flex
           vAlign="center"
           space="between"
-          style={{ display: !expanded ? "flex" : "none" }}
+          style={{ display: !isExpanded ? "flex" : "none" }}
         >
           <Flex vAlign="center" gap="gap.small">
             <Avatar name={displayName}></Avatar>
@@ -184,7 +184,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
         {/* Expanded view */}
         <Flex
-          style={{ display: expanded ? "flex" : "none" }}
+          style={{ display: isExpanded ? "flex" : "none" }}
           gap="gap.small"
           column
         >
