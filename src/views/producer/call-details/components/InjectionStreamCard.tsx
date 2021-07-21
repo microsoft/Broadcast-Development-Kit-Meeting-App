@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import {
@@ -33,6 +33,7 @@ import {
   unmuteBotAsync,
 } from "@/stores/calls/private-call/asyncActions";
 import { openNewInjectionStreamSettings } from "@/stores/calls/private-call/actions/newInjectionStreamSettings";
+import AppState from "@/stores/AppState";
 
 interface InjectionCardProps {
   stream: InjectionStream | null;
@@ -43,14 +44,16 @@ const OBFUSCATION_PATTERN = "********";
 
 const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   const dispatch = useDispatch();
-
+  const activeMute = useSelector(
+    (state: AppState) => state.privateCall.activeInjectionMute
+  );
   const { stream, callId } = props;
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(!expanded);
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
-  const [botMuted, setBotMuted] = useState(false);
+  const [botMuted, setBotMuted] = useState(activeMute ?? false);
 
   const muteBotAudio = () => {
     dispatch(muteBotAsync(callId));
@@ -98,7 +101,10 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
   const getInjectionUrl = (stream: InjectionStream): string => {
     if (stream.protocol === StreamProtocol.RTMP && stream.injectionUrl) {
-      return stream.injectionUrl.replace(stream.passphrase, OBFUSCATION_PATTERN);
+      return stream.injectionUrl.replace(
+        stream.passphrase,
+        OBFUSCATION_PATTERN
+      );
     }
 
     return stream.injectionUrl ?? "";
@@ -240,7 +246,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
               <Text weight="bold" content="Stream URL:" />
 
-              <Text style={{overflowWrap: 'break-word'}}>
+              <Text style={{ overflowWrap: "break-word" }}>
                 {injectionUrl}{" "}
                 <Button circular iconOnly>
                   <CopyToClipboard text={stream?.injectionUrl}>

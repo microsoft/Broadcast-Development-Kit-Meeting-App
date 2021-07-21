@@ -7,6 +7,7 @@ import {
   CallContext,
   CallState,
   CallStreamKey,
+  InjectionStream,
   KeyLength,
   NewCall,
   NewInjectionStream,
@@ -28,6 +29,7 @@ export type PrivateCallState = {
   newCall: null | NewCall;
   newStream: null | NewStream;
   newInjectionStream: null | NewInjectionStream;
+  activeInjectionMute: boolean;
   activeCallsLoading: boolean;
   activeCallsError: null | string;
 } & PollingSettings;
@@ -44,6 +46,7 @@ export const INITIAL_STATE: PrivateCallState = {
   activeCallsLoading: false,
   activeCallsError: null,
   isPollingEnabled: false,
+  activeInjectionMute: false,
   pollingTime: PRODUCER_DEFAULT_POLLING_TIME,
 };
 
@@ -288,6 +291,34 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
       activeCall: updated,
     };
   },
+  [PrivateCallsActions.REQUEST_MUTE_BOT_FINISHED](
+    state: PrivateCallState,
+    action: PrivateCallsActions.RequestMuteBotFinished
+  ): PrivateCallState {
+    const call = state.activeCall;
+    if (!call) {
+      return state;
+    }
+
+    return {
+      ...state,
+      activeInjectionMute: true,
+    };
+  },
+  [PrivateCallsActions.REQUEST_UNMUTE_BOT_FINISHED](
+    state: PrivateCallState,
+    action: PrivateCallsActions.RequestUnmuteBotFinished
+  ): PrivateCallState {
+    const call = state.activeCall;
+    if (!call) {
+      return state;
+    }
+
+    return {
+      ...state,
+      activeInjectionMute: false,
+    };
+  },
 });
 
 const defaultCallValues = {
@@ -304,11 +335,14 @@ const fillDefaults = (
   defaultLatency: defaults.defaultLatency ?? defaultCallValues.defaultLatency,
   defaultPassphrase:
     defaults.defaultPassphrase ?? defaultCallValues.defaultPassphrase,
-  defaultKeyLength: defaults.defaultKeyLength ?? defaultCallValues.defaultKeyLength,
+  defaultKeyLength:
+    defaults.defaultKeyLength ?? defaultCallValues.defaultKeyLength,
   defaultProtocol: defaults.defaultProtocol ?? StreamProtocol.RTMP,
   defaultMode: defaults.defaultMode ?? StreamMode.Listener,
-  streams: call.streams ? call.streams.map((o) => ({
-    ...o,
-    audioSharing: o.type !== StreamType.VbSS,
-  })):[],
+  streams: call.streams
+    ? call.streams.map((o) => ({
+        ...o,
+        audioSharing: o.type !== StreamType.VbSS,
+      }))
+    : [],
 });
