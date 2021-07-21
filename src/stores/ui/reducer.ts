@@ -15,9 +15,9 @@ const INITIAL_STATE: UIState = {
 };
 
 export const uiReducer: Reducer = baseReducer(INITIAL_STATE, {
-    [UIActions.ADD_CALL_ACTIVE_SECTION](
+    [UIActions.EXPAND_SECTION](
         state: UIState,
-        action: UIActions.AddCallActiveSection
+        action: UIActions.ExpandSection
     ): UIState {
         const items: number[] = action.payload?.filter((item: number) => !state.expandedSections.includes(item)) || [];
         const updatedSections = [...state.expandedSections, ...items];
@@ -27,9 +27,9 @@ export const uiReducer: Reducer = baseReducer(INITIAL_STATE, {
             expandedSections: updatedSections,
         };
     },
-    [UIActions.REMOVE_CALL_ACTIVE_SECTION](
+    [UIActions.COLLAPSE_SECTION](
         state: UIState,
-        action: UIActions.RemoveCallActiveSection
+        action: UIActions.CollapseSection
     ): UIState {
         const indexToRemove = state.expandedSections.findIndex((item:number) => item === action.payload!)
 
@@ -45,9 +45,9 @@ export const uiReducer: Reducer = baseReducer(INITIAL_STATE, {
             expandedSections: items,
         };
     },
-    [UIActions.ADD_CALL_ACTIVE_CARD](
+    [UIActions.EXPAND_CARD](
         state: UIState,
-        action: UIActions.AddCallActiveCard
+        action: UIActions.ExpandCard
     ): UIState {
         const items: string[] = action.payload?.filter((item: string) => !state.expandedCards.includes(item)) || [];
         const updatedSections = [...state.expandedCards, ...items];
@@ -57,9 +57,9 @@ export const uiReducer: Reducer = baseReducer(INITIAL_STATE, {
             expandedCards: updatedSections,
         };
     },
-    [UIActions.REMOVE_CALL_ACTIVE_CARD](
+    [UIActions.COLLAPSE_CARD](
         state: UIState,
-        action: UIActions.RemoveCallActiveCard
+        action: UIActions.CollapseCard
     ): UIState {
         const indexToRemove = state.expandedCards.findIndex((item:string) => item === action.payload!)
 

@@ -2,32 +2,32 @@
 // Licensed under the MIT license.
 import BaseAction from '../base/BaseAction';
 
-export const ADD_CALL_ACTIVE_SECTION = 'ADD_CALL_ACTIVE_SECTION';
-export const REMOVE_CALL_ACTIVE_SECTION = 'REMOVE_CALL_ACTIVE_SECTION';
-export const ADD_CALL_ACTIVE_CARD = 'ADD_CALL_ACTIVE_CARD';
-export const REMOVE_CALL_ACTIVE_CARD = 'REMOVE_CALL_ACTIVE_CARD';
+export const EXPAND_SECTION = 'EXPAND_SECTION';
+export const COLLAPSE_SECTION = 'COLLAPSE_SECTION';
+export const EXPAND_CARD = 'EXPAND_CARD';
+export const COLLAPSE_CARD = 'COLLAPSE_CARD';
 
-export interface AddCallActiveSection extends BaseAction<number[]> { }
-export interface RemoveCallActiveSection extends BaseAction<number> { }
-export interface AddCallActiveCard extends BaseAction<string[]> { }
-export interface RemoveCallActiveCard extends BaseAction<string> { }
+export interface ExpandSection extends BaseAction<number[]> { }
+export interface CollapseSection extends BaseAction<number> { }
+export interface ExpandCard extends BaseAction<string[]> { }
+export interface CollapseCard extends BaseAction<string> { }
 
-export const addCallActiveSection = (items: number[]): AddCallActiveSection => ({
-    type: ADD_CALL_ACTIVE_SECTION,
+export const expandSection = (items: number[]): ExpandSection => ({
+    type: EXPAND_SECTION,
     payload: items
 });
 
-export const removeCallActiveSection = (item: number): RemoveCallActiveSection => ({
-    type: REMOVE_CALL_ACTIVE_SECTION,
+export const collapseSection = (item: number): CollapseSection => ({
+    type: COLLAPSE_SECTION,
     payload: item
 });
 
-export const addCallActiveCard = (items: string[]): AddCallActiveCard => ({
-    type: ADD_CALL_ACTIVE_CARD,
+export const expandCard = (items: string[]): ExpandCard => ({
+    type: EXPAND_CARD,
     payload: items
 });
 
-export const removeCallActiveCard = (item: string): RemoveCallActiveCard => ({
-    type: REMOVE_CALL_ACTIVE_CARD,
+export const collapseCard = (item: string): CollapseCard => ({
+    type: COLLAPSE_CARD,
     payload: item
 });

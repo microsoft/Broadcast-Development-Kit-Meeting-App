@@ -15,8 +15,8 @@ import StreamCard from "./components/StreamCard";
 import BotServiceStatus from "@/views/components/bot-service/BotServiceStatus";
 import "./CallDetails.css";
 import {
-  addCallActiveSection,
-  removeCallActiveSection,
+  expandSection,
+  collapseSection,
 } from "@/stores/ui/actions";
 
 const CallDetails: React.FC = () => {
@@ -34,8 +34,8 @@ const CallDetails: React.FC = () => {
     const sectionIndex = data.index;
     const isSectionExpanded = expandedSections.includes(sectionIndex);
     isSectionExpanded
-      ? dispatch(removeCallActiveSection(sectionIndex))
-      : dispatch(addCallActiveSection([sectionIndex]));
+      ? dispatch(collapseSection(sectionIndex))
+      : dispatch(expandSection([sectionIndex]));
   };
 
   const {

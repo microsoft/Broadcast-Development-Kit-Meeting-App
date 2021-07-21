@@ -37,7 +37,7 @@ import { stopStreamAsync } from "@/stores/calls/private-call/asyncActions";
 import { ApiClient } from "@/services/api";
 import { ApiError } from "@/models/error/types";
 import AppState from "@/stores/AppState";
-import { addCallActiveCard, removeCallActiveCard } from "@/stores/ui/actions";
+import { expandCard, collapseCard } from "@/stores/ui/actions";
 
 interface StreamCardProps {
   callId: string;
@@ -64,8 +64,8 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
   const toggleExpanded = () => {
     isExpanded
-      ? dispatch(removeCallActiveCard(stream.id))
-      : dispatch(addCallActiveCard([stream.id]));
+      ? dispatch(collapseCard(stream.id))
+      : dispatch(expandCard([stream.id]));
   }
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
     if (!isStreamDisconnected) {
       dispatch(stopStreamAsync(stream.id));
-      dispatch(removeCallActiveCard(stream.id))
+      dispatch(collapseCard(stream.id))
     }
   };
 

@@ -34,7 +34,7 @@ import {
 } from "@/stores/calls/private-call/asyncActions";
 import { openNewInjectionStreamSettings } from "@/stores/calls/private-call/actions/newInjectionStreamSettings";
 import AppState from "@/stores/AppState";
-import { addCallActiveCard, removeCallActiveCard } from "@/stores/ui/actions";
+import { expandCard, collapseCard } from "@/stores/ui/actions";
 
 interface InjectionCardProps {
   stream: InjectionStream | null;
@@ -57,8 +57,8 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
   const toggleExpanded = () => {
     isExpanded
-      ? dispatch(removeCallActiveCard(displayName))
-      : dispatch(addCallActiveCard([displayName]));
+      ? dispatch(collapseCard(displayName))
+      : dispatch(expandCard([displayName]));
   }
 
   const muteBotAudio = () => {
