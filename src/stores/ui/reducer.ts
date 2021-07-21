@@ -5,12 +5,12 @@ import * as UIActions from "./actions";
 import baseReducer from "../base/BaseReducer";
 
 export interface UIState {
-    callDetailsActiveSections: number[];
+    activeSections: number[];
     activeCards: string[];
 }
 
 const INITIAL_STATE: UIState = {
-    callDetailsActiveSections: [0,1,2],
+    activeSections: [0,1,2],
     activeCards: [],
 };
 
@@ -19,30 +19,30 @@ export const uiReducer: Reducer = baseReducer(INITIAL_STATE, {
         state: UIState,
         action: UIActions.AddCallActiveSection
     ): UIState {
-        const items: number[] = action.payload?.filter((item: number) => !state.callDetailsActiveSections.includes(item)) || [];
-        const updatedSections = [...state.callDetailsActiveSections, ...items];
+        const items: number[] = action.payload?.filter((item: number) => !state.activeSections.includes(item)) || [];
+        const updatedSections = [...state.activeSections, ...items];
 
         return {
             ...state,
-            callDetailsActiveSections: updatedSections,
+            activeSections: updatedSections,
         };
     },
     [UIActions.REMOVE_CALL_ACTIVE_SECTION](
         state: UIState,
         action: UIActions.RemoveCallActiveSection
     ): UIState {
-        const indexToRemove = state.callDetailsActiveSections.findIndex((item:number) => item === action.payload!)
+        const indexToRemove = state.activeSections.findIndex((item:number) => item === action.payload!)
 
         if (indexToRemove === -1){
             return state
         }
 
-        const items = state.callDetailsActiveSections;
+        const items = state.activeSections;
         items.splice(indexToRemove, 1);
 
         return {
             ...state,
-            callDetailsActiveSections: items,
+            activeSections: items,
         };
     },
     [UIActions.ADD_CALL_ACTIVE_CARD](

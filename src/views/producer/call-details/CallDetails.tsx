@@ -27,7 +27,7 @@ const CallDetails: React.FC = () => {
   );
 
   const activeSections = useSelector(
-    (state: AppState) => state.ui.callDetailsActiveSections
+    (state: AppState) => state.ui.activeSections
   );
 
   const toggleActiveSection = (event: any, data: any) => {
