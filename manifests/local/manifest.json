@@ -15,12 +15,12 @@
     "termsOfUseUrl": "https://{{HOSTNAME}}/tou.html"
   },
   "name": {
-    "short": "Broadcast Development Kit",
-    "full": "Broadcast Development Kit for Teams"
+    "short": "Broadcast Dev. Kit",
+    "full": "Broadcast Development Kit"
   },
   "description": {
-    "short": "Operate the Broadcast Development Kit for Teams inside your teams meeting",
-    "full": "This extension allows you to use the Broadcast Development Kit for Teams solution you have deployed for your Office 365 tenant directly within Teams"
+    "short": "Operate the Broadcast Development Kit inside your teams meeting",
+    "full": "This extension allows you to use the Broadcast Development Kit solution you have deployed for your Office 365 tenant directly within Teams"
   },
   "icons": {
     "outline": "icon-outline.png",
