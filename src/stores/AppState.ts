@@ -10,6 +10,7 @@ import { ErrorState } from "@/stores/errors/reducer";
 import { ToastState } from "@/stores/toast/reducer";
 import { PrivateCallState } from "@/stores/calls/private-call/reducer";
 import { BotServiceAppState } from "@/stores/service/reducer";
+import { UIState } from "./ui/reducer";
 
 export default interface AppState {
   router: RouterState;
@@ -21,5 +22,6 @@ export default interface AppState {
   botService: BotServiceAppState;
   errors: ErrorState;
   toast: ToastState;
+  ui: UIState;
   requesting: RequestingState;
 }

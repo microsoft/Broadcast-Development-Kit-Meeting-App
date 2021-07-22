@@ -19,6 +19,7 @@ import requestingReducer from '@/stores/requesting/reducer';
 import errorReducer from '@/stores/errors/reducer';
 import { toastReducer } from '@/stores/toast/reducer';
 import errorToastMiddleware from '@/middlewares/errorToastMiddleware';
+import { uiReducer } from './ui/reducer';
 
 const createRootReducer = (history: History) => combineReducers<AppState>({
   router: connectRouter(history),
@@ -31,6 +32,7 @@ const createRootReducer = (history: History) => combineReducers<AppState>({
   requesting: requestingReducer,
   errors: errorReducer,
   toast: toastReducer,
+  ui: uiReducer,
 });
 
 const configureStore = (): Store<CombinedState<AppState>, AnyAction> => createStore(

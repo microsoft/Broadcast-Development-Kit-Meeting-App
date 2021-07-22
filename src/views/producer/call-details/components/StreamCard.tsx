@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import {
@@ -36,6 +36,8 @@ import { openNewStreamSettings } from "@/stores/calls/private-call/actions/newSt
 import { stopStreamAsync } from "@/stores/calls/private-call/asyncActions";
 import { ApiClient } from "@/services/api";
 import { ApiError } from "@/models/error/types";
+import AppState from "@/stores/AppState";
+import { expandCard, collapseCard } from "@/stores/ui/actions";
 
 interface StreamCardProps {
   callId: string;
@@ -55,11 +57,16 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
     callProtocol,
   } = props;
 
-  const [expanded, setExpanded] = useState(false);
-  const toggleExpanded = () => setExpanded(!expanded);
+  const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(stream.id));
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
   const [avatartImage, setAvatartImage] = useState("");
+
+  const toggleExpanded = () => {
+    isExpanded
+      ? dispatch(collapseCard(stream.id))
+      : dispatch(expandCard([stream.id]));
+  }
 
   useEffect(() => {
     if (stream.photoUrl) {
@@ -100,6 +107,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
     if (!isStreamDisconnected) {
       dispatch(stopStreamAsync(stream.id));
+      dispatch(collapseCard(stream.id))
     }
   };
 
@@ -147,7 +155,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
         <Flex
           vAlign="center"
           space="between"
-          style={{ display: !expanded ? "flex" : "none" }}
+          style={{ display: !isExpanded ? "flex" : "none" }}
         >
           <Flex vAlign="center" gap="gap.small">
             <Avatar image={avatartImage} name={stream.displayName}></Avatar>
@@ -200,7 +208,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
         {/* Expanded view */}
         <Flex
-          style={{ display: expanded ? "flex" : "none" }}
+          style={{ display: isExpanded ? "flex" : "none" }}
           gap="gap.smaller"
           column
         >
