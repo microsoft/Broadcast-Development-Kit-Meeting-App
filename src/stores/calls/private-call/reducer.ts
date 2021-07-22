@@ -285,10 +285,7 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
 
     const updatedCall: PrivateCall = {
       ...call,
-      streams: [
-        ...call.streams.filter( (stream: Stream) => stream.id !== streamId),
-        ...[updatedStream]
-      ]
+      streams: call.streams.map((stream: Stream) => stream.id !== streamId ? stream : updatedStream),
     };
 
     return {
