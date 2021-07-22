@@ -17,4 +17,5 @@ export interface CallDetailsProps {
   pollingTime: number;
   meetingId: string;
   callProtocol: StreamProtocol;
+  isBotMuted: boolean;
 }

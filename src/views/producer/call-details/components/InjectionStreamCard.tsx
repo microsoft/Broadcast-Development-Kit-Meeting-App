@@ -39,21 +39,20 @@ import { expandCard, collapseCard } from "@/stores/ui/actions";
 interface InjectionCardProps {
   stream: InjectionStream | null;
   callId: string;
+  isBotMuted: boolean;
 }
 
 const OBFUSCATION_PATTERN = "********";
 
 const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   const dispatch = useDispatch();
-
-  const { stream, callId } = props;
+  const { stream, callId, isBotMuted } = props;
 
   const displayName = "Injection Stream";
   const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(displayName));
 
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
-  const [botMuted, setBotMuted] = useState(false);
 
   const toggleExpanded = () => {
     isExpanded
@@ -63,12 +62,10 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
   const muteBotAudio = () => {
     dispatch(muteBotAsync(callId));
-    setBotMuted(true);
   };
 
   const unmuteBotAudio = () => {
     dispatch(unmuteBotAsync(callId));
-    setBotMuted(false);
   };
 
   const toggleStreamOperation = () => {
@@ -107,7 +104,10 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
   const getInjectionUrl = (stream: InjectionStream): string => {
     if (stream.protocol === StreamProtocol.RTMP && stream.injectionUrl) {
-      return stream.injectionUrl.replace(stream.passphrase, OBFUSCATION_PATTERN);
+      return stream.injectionUrl.replace(
+        stream.passphrase,
+        OBFUSCATION_PATTERN
+      );
     }
 
     return stream.injectionUrl ?? "";
@@ -140,7 +140,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
           </Flex>
 
           <Flex vAlign="center" gap="gap.smaller">
-            {botMuted && (
+            {isBotMuted && (
               <Button
                 circular
                 icon={<MicOffIcon />}
@@ -148,7 +148,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
                 onClick={unmuteBotAudio}
               />
             )}
-            {!botMuted && (
+            {!isBotMuted && (
               <Button
                 circular
                 icon={<MicIcon />}
@@ -201,10 +201,10 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
           <Flex column hAlign="start" gap="gap.smaller">
             <Button
-              onClick={botMuted ? unmuteBotAudio : muteBotAudio}
+              onClick={isBotMuted ? unmuteBotAudio : muteBotAudio}
               style={{ minWidth: "115px" }}
             >
-              {botMuted ? (
+              {isBotMuted ? (
                 <MicOffIcon
                   style={{
                     marginRight: "0.25rem",
@@ -217,7 +217,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
                   }}
                 />
               )}
-              <Text content={!botMuted ? "Mute" : "Unmute"} />
+              <Text content={!isBotMuted ? "Mute" : "Unmute"} />
             </Button>
             <Button
               onClick={toggleStreamOperation}
@@ -248,7 +248,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
               <Text weight="bold" content="Stream URL:" />
 
-              <Text style={{overflowWrap: 'break-word'}}>
+              <Text style={{ overflowWrap: "break-word" }}>
                 {injectionUrl}{" "}
                 <Button circular iconOnly>
                   <CopyToClipboard text={stream?.injectionUrl}>
