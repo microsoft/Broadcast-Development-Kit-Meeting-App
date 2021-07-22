@@ -14,12 +14,29 @@ import StreamSettings from "./components/StreamSettings";
 import StreamCard from "./components/StreamCard";
 import BotServiceStatus from "@/views/components/bot-service/BotServiceStatus";
 import "./CallDetails.css";
+import {
+  expandSection,
+  collapseSection,
+} from "@/stores/ui/actions";
 
 const CallDetails: React.FC = () => {
   const dispatch = useDispatch();
+
   const callDetailsProps = useSelector((state: AppState) =>
     selectCallDetailsProps(state)
   );
+
+  const expandedSections = useSelector(
+    (state: AppState) => state.ui.expandedSections
+  );
+
+  const toggleExpandedSection = (event: any, data: any) => {
+    const sectionIndex = data.index;
+    const isSectionExpanded = expandedSections.includes(sectionIndex);
+    isSectionExpanded
+      ? dispatch(collapseSection(sectionIndex))
+      : dispatch(expandSection([sectionIndex]));
+  };
 
   const {
     callId,
@@ -98,7 +115,8 @@ const CallDetails: React.FC = () => {
             {isInjectionStreamSettingsEnabled && <InjectionStreamSettings />}
             {!isAnyStreamEnabled && (
               <Accordion
-                defaultActiveIndex={[0, 1, 2]}
+                onTitleClick={toggleExpandedSection}
+                defaultActiveIndex={expandedSections}
                 panels={[
                   {
                     title: "Injection Stream",

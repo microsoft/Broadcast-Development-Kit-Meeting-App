@@ -19,7 +19,7 @@ const ConfigPage: React.FC = () => {
         microsoftTeams.settings.setSettings({
           contentUrl: host + `/?name={loginHint}&tenant={tid}&group={groupId}&theme={theme}`,
           websiteUrl: host + "/public?name={loginHint}&tenant={tid}&group={groupId}&theme={theme}",
-          suggestedDisplayName: "Broadcast Protocols for Teams",
+          suggestedDisplayName: "Broadcast Development Kit",
           removeUrl: host + "/remove?theme={theme}",
           entityId: "something",
         });

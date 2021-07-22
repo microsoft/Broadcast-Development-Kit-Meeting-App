@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import {
@@ -33,6 +33,8 @@ import {
   unmuteBotAsync,
 } from "@/stores/calls/private-call/asyncActions";
 import { openNewInjectionStreamSettings } from "@/stores/calls/private-call/actions/newInjectionStreamSettings";
+import AppState from "@/stores/AppState";
+import { expandCard, collapseCard } from "@/stores/ui/actions";
 
 interface InjectionCardProps {
   stream: InjectionStream | null;
@@ -46,10 +48,17 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   const dispatch = useDispatch();
   const { stream, callId, isBotMuted } = props;
 
-  const [expanded, setExpanded] = useState(false);
-  const toggleExpanded = () => setExpanded(!expanded);
+  const displayName = "Injection Stream";
+  const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(displayName));
+
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
+
+  const toggleExpanded = () => {
+    isExpanded
+      ? dispatch(collapseCard(displayName))
+      : dispatch(expandCard([displayName]));
+  }
 
   const muteBotAudio = () => {
     dispatch(muteBotAsync(callId));
@@ -105,7 +114,6 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
   };
 
   const injectionUrl = stream ? getInjectionUrl(stream) : "";
-  const displayName = "Injection Stream";
 
   return (
     <Flex>
@@ -122,7 +130,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
         <Flex
           vAlign="center"
           space="between"
-          style={{ display: !expanded ? "flex" : "none" }}
+          style={{ display: !isExpanded ? "flex" : "none" }}
         >
           <Flex vAlign="center" gap="gap.small">
             <Avatar name={displayName}></Avatar>
@@ -176,7 +184,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
         {/* Expanded view */}
         <Flex
-          style={{ display: expanded ? "flex" : "none" }}
+          style={{ display: isExpanded ? "flex" : "none" }}
           gap="gap.small"
           column
         >
