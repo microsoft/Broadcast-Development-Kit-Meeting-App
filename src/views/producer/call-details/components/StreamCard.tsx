@@ -38,6 +38,7 @@ import { ApiClient } from "@/services/api";
 import { ApiError } from "@/models/error/types";
 import AppState from "@/stores/AppState";
 import { expandCard, collapseCard } from "@/stores/ui/actions";
+import { updateStreamPhoto } from "@/stores/calls/private-call/actions";
 
 interface StreamCardProps {
   callId: string;
@@ -60,7 +61,6 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
   const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(stream.id));
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
-  const [avatartImage, setAvatartImage] = useState("");
 
   const toggleExpanded = () => {
     isExpanded
@@ -69,7 +69,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
   }
 
   useEffect(() => {
-    if (stream.photoUrl) {
+    if (stream.photoUrl && stream.photo === undefined) {
       ApiClient.get<any>({
         url: stream.photoUrl,
         shouldOverrideBaseUrl: true,
@@ -81,12 +81,13 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
         if (isError) {
           const error = response as ApiError;
           console.error(error.raw);
+          dispatch(updateStreamPhoto(stream.id, ""));
           return;
         }
 
         const urlCreator = window.URL || window.webkitURL;
         const imageUrl = urlCreator.createObjectURL(response);
-        setAvatartImage(imageUrl);
+        dispatch(updateStreamPhoto(stream.id, imageUrl));
       });
     }
   }, []);
@@ -158,7 +159,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
           style={{ display: !isExpanded ? "flex" : "none" }}
         >
           <Flex vAlign="center" gap="gap.small">
-            <Avatar image={avatartImage} name={stream.displayName}></Avatar>
+            <Avatar image={stream.photo} name={stream.displayName}></Avatar>
             <Flex column>
               <Text style={{ marginBottom: "0px" }}>{stream.displayName}</Text>
               {!isStreamTypeSpecial && (
@@ -236,7 +237,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
             <Flex.Item push>
               <Avatar
                 size="larger"
-                image={avatartImage}
+                image={stream.photo}
                 name={stream.displayName}
                 style={{ cursor: "pointer" }}
                 onClick={toggleExpanded}

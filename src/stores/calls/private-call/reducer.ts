@@ -121,6 +121,7 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
 
     const updatedStream: Stream = {
       ...resource.resource,
+      photo: state.activeCall?.streams.find((stream: Stream) => stream.id === resource.resource.id)?.photo
     };
 
     const call = state.activeCall;
@@ -151,6 +152,7 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
 
     const updatedStream: Stream = {
       ...resource.resource,
+      photo: state.activeCall?.streams.find((stream: Stream) => stream.id === resource.resource.id)?.photo
     };
 
     const call = state.activeCall;
@@ -263,6 +265,37 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
       isPollingEnabled: action.payload!.isPollingEnabled,
     };
   },
+  [PrivateCallsActions.UPDATE_STREAM_PHOTO](
+    state: PrivateCallState,
+    action: PrivateCallsActions.UpdateStreamPhoto
+  ): PrivateCallState {
+    const streamId = action.payload!.streamId;
+    const photo = action.payload!.photo;
+
+    const call = state.activeCall;
+
+    if (!call) {
+      return state;
+    }
+
+    const updatedStream = { 
+      ...call.streams.find((stream:Stream) => stream.id === streamId),
+      photo: photo
+    } as Stream
+
+    const updatedCall: PrivateCall = {
+      ...call,
+      streams: [
+        ...call.streams.filter( (stream: Stream) => stream.id !== streamId),
+        ...[updatedStream]
+      ]
+    };
+
+    return {
+      ...state,
+      activeCall: updatedCall,
+    };
+  },
   [PrivateCallsActions.REQUEST_REFRESH_STREAM_KEY_FINISHED](
     state: PrivateCallState,
     action: PrivateCallsActions.RequestRefreshStreamKeyFinished
@@ -339,10 +372,9 @@ const fillDefaults = (
     defaults.defaultKeyLength ?? defaultCallValues.defaultKeyLength,
   defaultProtocol: defaults.defaultProtocol ?? StreamProtocol.RTMP,
   defaultMode: defaults.defaultMode ?? StreamMode.Listener,
-  streams: call.streams
-    ? call.streams.map((o) => ({
-        ...o,
-        audioSharing: o.type !== StreamType.VbSS,
-      }))
-    : [],
+  streams: call.streams ? call.streams.map((o) => ({
+    ...o,
+    audioSharing: o.type !== StreamType.VbSS,
+    photo: defaults.streams?.find((stream: Stream) => stream.id === o.id)?.photo
+  })):[],
 });

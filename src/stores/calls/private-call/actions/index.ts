@@ -15,3 +15,4 @@ export * from './updateCallDefaults';
 export * from './newInjectionStreamSettings';
 export * from './newStreamSettings';
 export * from './refreshStreamKey';
+export * from './updateStreamPhoto';
