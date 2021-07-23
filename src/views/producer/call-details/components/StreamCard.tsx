@@ -122,6 +122,9 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
           case StreamType.VbSS:
             return isStageEnabled;
           case StreamType.Participant:
+          case StreamType.LargeGallery: 
+          case StreamType.LiveEvent:
+          case StreamType.TogetherMode: 
             return stream.isSharingVideo;
         }
       default:
