@@ -40,12 +40,21 @@ export const InactiveStatuses = [
 ];
 
 export enum StreamType {
-  VbSS,
-  PrimarySpeaker,
-  Participant,
+  VbSS = 0,
+  PrimarySpeaker = 1,
+  Participant = 2,
+  TogetherMode = 3,
+  LargeGallery = 4,
+  LiveEvent = 5,
 }
 
-export const SpecialStreamTypes = [StreamType.VbSS, StreamType.PrimarySpeaker];
+export const SpecialStreamTypes = [
+  StreamType.VbSS,
+  StreamType.PrimarySpeaker,
+  StreamType.LargeGallery,
+  StreamType.LiveEvent,
+  StreamType.TogetherMode,
+];
 
 export enum StreamMode {
   Caller = 1,
