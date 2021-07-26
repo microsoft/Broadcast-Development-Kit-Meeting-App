@@ -103,10 +103,7 @@ const CallDetails: React.FC = () => {
         hAlign="stretch"
         space="between"
         style={{
-          height: "calc(100% - 50px)",
-          overflow: "auto",
-          overflowY: "auto",
-          overflowX: "hidden",
+          height: "calc(100% - 50px)"
         }}
       >
         {callEnabled ? (
