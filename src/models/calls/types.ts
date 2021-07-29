@@ -129,10 +129,11 @@ export interface StopStreamRequest {
 
 export type StreamConfiguration = {
   streamUrl: string;
-  streamKey: string;
+  streamKey?: string;
   unmixedAudio: boolean;
   audioFormat: number;
   timeOverlay: boolean;
+  enableSsl: boolean;
 };
 
 export interface StreamSrtConfiguration extends StreamConfiguration {
@@ -167,6 +168,7 @@ export interface NewStream {
     passphrase?: string;
     keyLength?: KeyLength;
     unmixedAudio: boolean;
+    enableSsl: boolean;
   };
 }
 
@@ -240,4 +242,9 @@ export enum KeyLength {
   SixteenBytes = 16,
   TwentyFourBytes = 24,
   ThirtyTwoBytes = 32,
+}
+
+export enum RtmpMode {
+  Pull = 1,
+  Push = 2,
 }

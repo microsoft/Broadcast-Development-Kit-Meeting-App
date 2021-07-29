@@ -194,6 +194,7 @@ export const callsReducer: Reducer = baseReducer(INITIAL_STATE, {
           latency: call.defaultLatency,
           passphrase: call.defaultPassphrase,
           unmixedAudio: false,
+          enableSsl: false
         },
       },
     };

@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import React, { ReactText, useReducer } from "react";
+import React, { ReactText, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AppState from "@/stores/AppState";
 
@@ -14,10 +14,14 @@ import {
   Checkbox,
   Button,
   Dropdown,
+  EyeIcon,
+  EyeSlashIcon,
+  RedoIcon,
 } from "@fluentui/react-northstar";
 import { closeNewStreamSettings } from "@/stores/calls/private-call/actions/newStreamSettings";
 import {
   KeyLength,
+  RtmpMode,
   StartStreamRequest,
   StreamConfiguration,
   StreamMode,
@@ -25,7 +29,10 @@ import {
   StreamSrtConfiguration,
   StreamType,
 } from "@/models/calls/types";
-import { startStreamAsync } from "@/stores/calls/private-call/asyncActions";
+import {
+  refreshStreamKeyAsync,
+  startStreamAsync,
+} from "@/stores/calls/private-call/asyncActions";
 import { useEffect } from "react";
 import { useMemo } from "react";
 import { collapseCard } from "@/stores/ui/actions";
@@ -34,7 +41,7 @@ interface SettingsState {
   protocol?: StreamProtocol;
   flow?: StreamType;
   url?: string;
-  mode?: StreamMode;
+  mode?: StreamMode | RtmpMode;
   port?: string;
   passphrase?: string;
   keyLength?: KeyLength;
@@ -44,6 +51,8 @@ interface SettingsState {
   audioFormat?: number;
   timeOverlay?: boolean;
   hasPassphraseError: boolean;
+  enableSsl?: boolean;
+  injectionUrl?: string;
 }
 
 const StreamSettings: React.FC = () => {
@@ -64,16 +73,23 @@ const StreamSettings: React.FC = () => {
     { hasPassphraseError: false }
   );
 
-  const KeyLengthValues = useMemo(() => Object.keys(KeyLength).filter(
-    (i) => !isNaN(parseInt(i))
-  ),[]);
+  const KeyLengthValues = useMemo(
+    () => Object.keys(KeyLength).filter((i) => !isNaN(parseInt(i))),
+    []
+  );
 
-  const keyLengthOptions = useMemo(() => KeyLengthValues.map((k) => {
-    return {
-      key: parseInt(k),
-      header: k === "0" ? "no-key" : `${k} Bytes`,
-    };
-  }),[KeyLengthValues]);
+  const keyLengthOptions = useMemo(
+    () =>
+      KeyLengthValues.map((k) => {
+        return {
+          key: parseInt(k),
+          header: k === "0" ? "no-key" : `${k} Bytes`,
+        };
+      }),
+    [KeyLengthValues]
+  );
+
+  const [showStreamKey, setShowStreamKey] = useState(false);
 
   const loadDefaultSettings = () => {
     const protocol = activeCall?.defaultProtocol || StreamProtocol.SRT;
@@ -81,11 +97,15 @@ const StreamSettings: React.FC = () => {
       protocol === StreamProtocol.SRT ? activeCall?.defaultPassphrase : "";
     const latency = activeCall?.defaultLatency;
     const url = "";
-    const mode = activeCall?.defaultMode || newStream?.mode;
+    const mode =
+      activeCall?.defaultProtocol === StreamProtocol.RTMP
+        ? RtmpMode.Pull
+        : StreamMode.Listener;
     const keyLength = activeCall?.defaultKeyLength || KeyLength.None;
     const unmixedAudio = newStream?.advancedSettings.unmixedAudio;
     const audioFormat = 0;
     const timeOverlay = true;
+    const enableSsl = newStream?.advancedSettings.enableSsl;
 
     setState({
       protocol,
@@ -97,6 +117,7 @@ const StreamSettings: React.FC = () => {
       unmixedAudio,
       audioFormat,
       timeOverlay,
+      enableSsl,
     });
   };
 
@@ -114,12 +135,16 @@ const StreamSettings: React.FC = () => {
     dispatch(closeNewStreamSettings());
   };
 
+  const handlerefreshStreamKey = () => {
+    dispatch(refreshStreamKeyAsync(activeCall!.id));
+  };
+
   const handleSave = () => {
     if (!newStream) {
       return;
     }
 
-    if (newStream.participantId){
+    if (newStream.participantId) {
       dispatch(collapseCard(newStream.participantId));
     }
 
@@ -129,8 +154,8 @@ const StreamSettings: React.FC = () => {
 
     if (state.protocol === StreamProtocol.SRT) {
       if (
-        config.streamKey.length &&
-        (config.streamKey.length < 10 || config.streamKey.length > 79)
+        config.streamKey?.length &&
+        (config.streamKey?.length < 10 || config.streamKey?.length > 79)
       ) {
         setState({ hasPassphraseError: true });
         return;
@@ -180,11 +205,12 @@ const StreamSettings: React.FC = () => {
         } as StreamSrtConfiguration;
       case StreamProtocol.RTMP:
         return {
+          mode: state.mode,
           unmixedAudio: state.unmixedAudio,
-          streamKey: state.passphrase,
           streamUrl: state.url,
           audioFormat: state.audioFormat,
           timeOverlay: state.timeOverlay,
+          enableSsl: state.enableSsl,
         } as StreamConfiguration;
       default:
         return {};
@@ -198,6 +224,8 @@ const StreamSettings: React.FC = () => {
   const defaultKeyLength = keyLengthOptions.find(
     (k) => k.key === state.keyLength
   );
+
+  const rtmpPushStreamKey = activeCall?.privateContext?.streamKey ?? "";
 
   return (
     <Flex gap="gap.small" column>
@@ -214,51 +242,76 @@ const StreamSettings: React.FC = () => {
             Streaming over <strong>{StreamProtocol[state.protocol]}</strong>
           </Text>
         )}
-        {state.protocol === StreamProtocol.RTMP && (
-          <Flex column gap="gap.small">
-            <Text weight="bold" content="Settings" />
-
+        <>
+          <Text weight="bold" content="Settings" />
+          Mode
+          <RadioGroup
+            checkedValue={state.mode}
+            onCheckedValueChange={(e, data) =>
+              setState({ mode: data?.value as StreamMode })
+            }
+            items={[
+              {
+                name: "pullOrCaller",
+                key: "pullOrCaller",
+                label:
+                  state.protocol === StreamProtocol.SRT ? "Caller" : "Pull",
+                value: StreamMode.Caller,
+              },
+              {
+                name: "pushOrListener",
+                key: "pushOrListener",
+                label:
+                  state.protocol === StreamProtocol.SRT ? "Listener" : "Push",
+                value: StreamMode.Listener,
+              },
+            ]}
+          />
+        </>
+        {state.protocol === StreamProtocol.RTMP &&
+          state.mode === RtmpMode.Pull && (
+            <Flex space="between" gap="gap.small">
+              <Text>Enable Ssl</Text>
+              <Checkbox
+                onChange={(event, data) =>
+                  setState({ enableSsl: data?.checked })
+                }
+                toggle
+                labelPosition="start"
+              />
+            </Flex>
+          )}
+        {state.protocol === StreamProtocol.RTMP &&
+          state.mode === RtmpMode.Push && (
             <Input
-              name="streamUrl"
-              label="Stream URL"
+              name="injectionUrl"
+              label="Injection URL"
+              value={state.injectionUrl}
               onChange={(event, data) => setState({ url: data?.value })}
-              value={state.url}
               fluid
             />
-
-            <Input
-              name="streamKey"
-              label="Stream Key"
-              onChange={(event, data) => setState({ passphrase: data?.value })}
-              value={state.passphrase}
-              fluid
+          )}
+        {/* Call Stream Key */}
+        <Text style={{ marginBottom: "2px" }}>Stream Key</Text>
+        <Flex space="between" vAlign="center">
+          <Text>{showStreamKey ? rtmpPushStreamKey : "********"} </Text>
+          <Flex gap="gap.small">
+            <Button
+              circular
+              iconOnly
+              icon={showStreamKey ? <EyeSlashIcon /> : <EyeIcon />}
+              onClick={() => setShowStreamKey((prev) => !prev)}
+            />
+            {/* Refresh Stream Key button */}
+            <Button
+              circular
+              icon={<RedoIcon />}
+              onClick={handlerefreshStreamKey}
             />
           </Flex>
-        )}
+        </Flex>
         {state.protocol === StreamProtocol.SRT && (
           <Flex column gap="gap.small">
-            <Text weight="bold" content="Settings" />
-            Mode
-            <RadioGroup
-              checkedValue={state.mode}
-              onCheckedValueChange={(e, data) =>
-                setState({ mode: data?.value as StreamMode })
-              }
-              items={[
-                {
-                  name: "listener",
-                  key: "listener",
-                  label: "Listener",
-                  value: StreamMode.Listener,
-                },
-                {
-                  name: "caller",
-                  key: "caller",
-                  label: "Caller",
-                  value: StreamMode.Caller,
-                },
-              ]}
-            />
             {state.mode === StreamMode.Caller && (
               <Input
                 name="streamUrl"
