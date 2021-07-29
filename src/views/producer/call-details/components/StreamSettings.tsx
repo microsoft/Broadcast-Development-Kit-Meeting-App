@@ -97,10 +97,7 @@ const StreamSettings: React.FC = () => {
       protocol === StreamProtocol.SRT ? activeCall?.defaultPassphrase : "";
     const latency = activeCall?.defaultLatency;
     const url = "";
-    const mode =
-      activeCall?.defaultProtocol === StreamProtocol.RTMP
-        ? RtmpMode.Pull
-        : StreamMode.Listener;
+    const mode = activeCall?.defaultMode || StreamMode.Listener;
     const keyLength = activeCall?.defaultKeyLength || KeyLength.None;
     const unmixedAudio = newStream?.advancedSettings.unmixedAudio;
     const audioFormat = 0;
@@ -248,22 +245,22 @@ const StreamSettings: React.FC = () => {
           <RadioGroup
             checkedValue={state.mode}
             onCheckedValueChange={(e, data) =>
-              setState({ mode: data?.value as StreamMode })
+              setState({  mode: data?.value as StreamMode })
             }
             items={[
               {
-                name: "pullOrCaller",
-                key: "pullOrCaller",
+                name: "pullOrListener",
+                key: "pullOrListener",
                 label:
-                  state.protocol === StreamProtocol.SRT ? "Caller" : "Pull",
-                value: StreamMode.Caller,
+                  state.protocol === StreamProtocol.SRT ? "Listener" : "Pull",
+                value: state.protocol === StreamProtocol.SRT ? StreamMode.Listener : RtmpMode.Pull,
               },
               {
-                name: "pushOrListener",
-                key: "pushOrListener",
+                name: "pushOrCaller",
+                key: "pushOrCaller",
                 label:
-                  state.protocol === StreamProtocol.SRT ? "Listener" : "Push",
-                value: StreamMode.Listener,
+                  state.protocol === StreamProtocol.SRT ? "Caller" : "Push",
+                value: state.protocol === StreamProtocol.SRT ? StreamMode.Caller : RtmpMode.Push,
               },
             ]}
           />

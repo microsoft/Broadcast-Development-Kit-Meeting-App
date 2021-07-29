@@ -87,7 +87,7 @@ export interface PrivateCall {
   defaultPassphrase: string;
   defaultKeyLength: KeyLength;
   defaultLatency: number;
-  defaultMode: StreamMode;
+  defaultMode: StreamMode | RtmpMode;
   streams: Stream[];
   injectionStream: InjectionStream | null;
   publicContext: PublicContext | null;
@@ -153,7 +153,7 @@ export interface CallDefaults {
   latency: number;
   passphrase: string;
   keyLength: KeyLength;
-  mode: StreamMode;
+  mode: StreamMode | RtmpMode;
 }
 
 export interface NewStream {
@@ -161,7 +161,7 @@ export interface NewStream {
   participantId?: string;
   participantName?: string;
   streamType: StreamType;
-  mode?: StreamMode;
+  mode?: StreamMode | RtmpMode;
   advancedSettings: {
     url?: string;
     latency?: number;
