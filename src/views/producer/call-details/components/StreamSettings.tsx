@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import React, { ReactText, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AppState from "@/stores/AppState";
 
@@ -204,7 +204,8 @@ const StreamSettings: React.FC = () => {
         return {
           mode: state.mode,
           unmixedAudio: state.unmixedAudio,
-          streamUrl: state.url,
+          streamUrl: state.mode === RtmpMode.Push ? state.url : null,
+          streamKey: state.mode === RtmpMode.Push ? state.passphrase : null,
           audioFormat: state.audioFormat,
           timeOverlay: state.timeOverlay,
           enableSsl: state.enableSsl,
@@ -245,68 +246,79 @@ const StreamSettings: React.FC = () => {
           <RadioGroup
             checkedValue={state.mode}
             onCheckedValueChange={(e, data) =>
-              setState({  mode: data?.value as StreamMode })
+              setState({ mode: data?.value as StreamMode })
             }
             items={[
               {
                 name: "pullOrListener",
                 key: "pullOrListener",
-                label:
-                  state.protocol === StreamProtocol.SRT ? "Listener" : "Pull",
+                label: state.protocol === StreamProtocol.SRT ? "Listener" : "Pull",
                 value: state.protocol === StreamProtocol.SRT ? StreamMode.Listener : RtmpMode.Pull,
               },
               {
                 name: "pushOrCaller",
                 key: "pushOrCaller",
-                label:
-                  state.protocol === StreamProtocol.SRT ? "Caller" : "Push",
-                value: state.protocol === StreamProtocol.SRT ? StreamMode.Caller : RtmpMode.Push,
+                label: state.protocol === StreamProtocol.SRT ? "Caller" : "Push",
+                value: state.protocol === StreamProtocol.SRT ? StreamMode.Caller  : RtmpMode.Push,
               },
             ]}
           />
         </>
-        {state.protocol === StreamProtocol.RTMP &&
-          state.mode === RtmpMode.Pull && (
-            <Flex space="between" gap="gap.small">
-              <Text>Enable Ssl</Text>
-              <Checkbox
-                onChange={(event, data) =>
-                  setState({ enableSsl: data?.checked })
-                }
-                toggle
-                labelPosition="start"
+        {state.protocol === StreamProtocol.RTMP && (
+          <>
+            {state.mode === RtmpMode.Pull && (
+              <>
+              <Flex space="between" gap="gap.small">
+                <Text>Enable Ssl</Text>
+                <Checkbox
+                  onChange={(event, data) =>
+                    setState({ enableSsl: data?.checked })
+                  }
+                  toggle
+                  labelPosition="start"
+                />
+              </Flex>
+              <Text style={{ marginBottom: "2px" }}>Stream Key</Text>
+              <Flex space="between" vAlign="center">
+                <Text>{showStreamKey ? rtmpPushStreamKey : "********"} </Text>
+                <Flex gap="gap.small">
+                  <Button
+                    circular
+                    iconOnly
+                    icon={showStreamKey ? <EyeSlashIcon /> : <EyeIcon />}
+                    onClick={() => setShowStreamKey((prev) => !prev)}
+                  />
+                  <Button
+                    circular
+                    icon={<RedoIcon />}
+                    onClick={handlerefreshStreamKey}
+                  />
+                </Flex>
+              </Flex>
+              
+            </>
+            )}
+            {state.mode === RtmpMode.Push && (
+              <>
+              <Input
+                name="injectionUrl"
+                label="Injection URL"
+                value={state.injectionUrl}
+                onChange={(event, data) => setState({ url: data?.value })}
+                fluid
               />
-            </Flex>
-          )}
-        {state.protocol === StreamProtocol.RTMP &&
-          state.mode === RtmpMode.Push && (
-            <Input
-              name="injectionUrl"
-              label="Injection URL"
-              value={state.injectionUrl}
-              onChange={(event, data) => setState({ url: data?.value })}
+              <Input
+              name="passphrase"
+              label="Passphrase"
+              value={state.passphrase}
+              onChange={(event, data) =>
+                setState({ passphrase: data?.value })
+              }
               fluid
-            />
-          )}
-        {/* Call Stream Key */}
-        <Text style={{ marginBottom: "2px" }}>Stream Key</Text>
-        <Flex space="between" vAlign="center">
-          <Text>{showStreamKey ? rtmpPushStreamKey : "********"} </Text>
-          <Flex gap="gap.small">
-            <Button
-              circular
-              iconOnly
-              icon={showStreamKey ? <EyeSlashIcon /> : <EyeIcon />}
-              onClick={() => setShowStreamKey((prev) => !prev)}
-            />
-            {/* Refresh Stream Key button */}
-            <Button
-              circular
-              icon={<RedoIcon />}
-              onClick={handlerefreshStreamKey}
-            />
-          </Flex>
-        </Flex>
+            /></>
+            )}
+          </>
+        )}
         {state.protocol === StreamProtocol.SRT && (
           <Flex column gap="gap.small">
             {state.mode === StreamMode.Caller && (
