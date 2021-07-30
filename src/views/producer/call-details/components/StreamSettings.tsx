@@ -52,7 +52,6 @@ interface SettingsState {
   timeOverlay?: boolean;
   hasPassphraseError: boolean;
   enableSsl?: boolean;
-  injectionUrl?: string;
 }
 
 const StreamSettings: React.FC = () => {
@@ -301,9 +300,9 @@ const StreamSettings: React.FC = () => {
             {state.mode === RtmpMode.Push && (
               <>
               <Input
-                name="injectionUrl"
-                label="Injection URL"
-                value={state.injectionUrl}
+                name="streamUrl"
+                label="Stream URL"
+                value={state.url}
                 onChange={(event, data) => setState({ url: data?.value })}
                 fluid
               />
