@@ -307,8 +307,8 @@ const StreamSettings: React.FC = () => {
                 fluid
               />
               <Input
-              name="passphrase"
-              label="Passphrase"
+              name="streamKey"
+              label="Stream Key"
               value={state.passphrase}
               onChange={(event, data) =>
                 setState({ passphrase: data?.value })
