@@ -48,6 +48,8 @@ interface StreamCardProps {
   callProtocol: StreamProtocol;
 }
 
+const OBFUSCATION_PATTERN = "********";
+
 const StreamCard: React.FC<StreamCardProps> = (props) => {
   const dispatch = useDispatch();
   const {
@@ -58,7 +60,9 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
     callProtocol,
   } = props;
 
-  const isExpanded = useSelector((state: AppState) => state.ui.expandedCards.includes(stream.id));
+  const isExpanded = useSelector((state: AppState) =>
+    state.ui.expandedCards.includes(stream.id)
+  );
   const [showPassphrase, setShowPassphrase] = useState(false);
   const toggleShowPassphrase = () => setShowPassphrase(!showPassphrase);
 
@@ -66,7 +70,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
     isExpanded
       ? dispatch(collapseCard(stream.id))
       : dispatch(expandCard([stream.id]));
-  }
+  };
 
   useEffect(() => {
     if (stream.photoUrl && stream.photo === undefined) {
@@ -108,7 +112,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
     if (!isStreamDisconnected) {
       dispatch(stopStreamAsync(stream.id));
-      dispatch(collapseCard(stream.id))
+      dispatch(collapseCard(stream.id));
     }
   };
 
@@ -123,9 +127,9 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
           case StreamType.VbSS:
             return isStageEnabled;
           case StreamType.Participant:
-          case StreamType.LargeGallery: 
+          case StreamType.LargeGallery:
           case StreamType.LiveEvent:
-          case StreamType.TogetherMode: 
+          case StreamType.TogetherMode:
             return stream.isSharingVideo;
         }
       default:
@@ -141,9 +145,21 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
     return "None";
   };
 
+  const getStreamUrl = (stream: Stream): string => {
+    if (stream.details?.streamUrl) {
+      return stream.details?.streamUrl.replace(
+        stream.details?.passphrase,
+        OBFUSCATION_PATTERN
+      );
+    }
+
+    return stream.details?.streamUrl ?? "";
+  };
+
   const isSrt = callProtocol === StreamProtocol.SRT;
   const isStreamTypeSpecial = SpecialStreamTypes.includes(stream.type);
   const isStreamOperationEnabled = streamOperationEnabled();
+  const streamUrl = stream ? getStreamUrl(stream) : "";
 
   return (
     <Flex>
@@ -277,8 +293,8 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
               <Text weight="bold" content="Stream URL:" />
 
-              <Text>
-                {stream.details?.streamUrl}{" "}
+              <Text style={{ overflowWrap: "anywhere" }}>
+                {streamUrl}{" "}
                 <Button circular iconOnly>
                   <CopyToClipboard text={stream.details?.streamUrl}>
                     <ClipboardCopiedToIcon />

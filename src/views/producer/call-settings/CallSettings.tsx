@@ -18,6 +18,7 @@ import useInput from "@/hooks/useInput";
 import {
   CallDefaults,
   KeyLength,
+  RtmpMode,
   StreamMode,
   StreamProtocol,
 } from "@/models/calls/types";
@@ -41,9 +42,11 @@ const CallSettings: React.FC = () => {
   );
 
   //State
-  const [mode, setMode] = useState(StreamMode.Listener);
+  const [mode, setMode] = useState<StreamMode | RtmpMode>(RtmpMode.Pull);
   const [hasPassphraseError, setHasPassphraseError] = useState(false);
-  const [keyLength, setKeyLength] = useState(call?.defaultKeyLength ?? KeyLength.None);
+  const [keyLength, setKeyLength] = useState(
+    call?.defaultKeyLength ?? KeyLength.None
+  );
 
   const defaultProtocol = call?.defaultProtocol ?? StreamProtocol.RTMP;
 
@@ -68,16 +71,21 @@ const CallSettings: React.FC = () => {
     bind: bindLatency,
   } = useInput("750", "750");
 
-  const KeyLengthValues = useMemo(() => Object.keys(KeyLength).filter(
-    (i) => !isNaN(parseInt(i))
-  ),[]);
+  const KeyLengthValues = useMemo(
+    () => Object.keys(KeyLength).filter((i) => !isNaN(parseInt(i))),
+    []
+  );
 
-  const keyLengthOptions = useMemo(() => KeyLengthValues.map((k) => {
-    return {
-      key: parseInt(k),
-      header: k === "0" ? "no-key" : `${k} Bytes`,
-    };
-  }),[KeyLengthValues]);
+  const keyLengthOptions = useMemo(
+    () =>
+      KeyLengthValues.map((k) => {
+        return {
+          key: parseInt(k),
+          header: k === "0" ? "no-key" : `${k} Bytes`,
+        };
+      }),
+    [KeyLengthValues]
+  );
 
   useEffect(() => {
     if (call) {
@@ -140,9 +148,9 @@ const CallSettings: React.FC = () => {
 
   const handleKeyLengthChange = (event: any, data: any) => {
     setKeyLength(data.value.key);
-  }
+  };
 
-  const defaultKeyLength = keyLengthOptions.find(k => k.key === keyLength);
+  const defaultKeyLength = keyLengthOptions.find((k) => k.key === keyLength);
 
   return (
     <Flex column gap="gap.small">
@@ -211,7 +219,7 @@ const CallSettings: React.FC = () => {
                 />
               </FlexItem>
             )}
-            <Text content="Key Length" style={{marginBottom: '2px'}} />
+            <Text content="Key Length" style={{ marginBottom: "2px" }} />
             <Dropdown
               items={keyLengthOptions}
               highlightFirstItemOnOpen={true}
@@ -219,6 +227,36 @@ const CallSettings: React.FC = () => {
               checkable
               disabled={!passphrase}
               onChange={handleKeyLengthChange}
+            />
+          </>
+        )}
+        {selectedProtocol === StreamProtocol[StreamProtocol.RTMP] && (
+          <>
+            <Text
+              weight="bold"
+              content="Settings"
+              style={{ marginTop: "4px" }}
+            />
+            Mode
+            <RadioGroup
+              checkedValue={mode}
+              onCheckedValueChange={(e, props) =>
+                setMode(props?.value as RtmpMode)
+              }
+              items={[
+                {
+                  name: "pull",
+                  key: "pull",
+                  label: "Pull",
+                  value: RtmpMode.Pull,
+                },
+                {
+                  name: "push",
+                  key: "push",
+                  label: "Push",
+                  value: RtmpMode.Push,
+                },
+              ]}
             />
           </>
         )}

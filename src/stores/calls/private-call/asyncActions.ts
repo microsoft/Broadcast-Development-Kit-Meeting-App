@@ -114,6 +114,7 @@ export const startStreamAsync =
         streamKey: request.config.streamKey || null,
         timeOverlay: request.config.timeOverlay,
         audioFormat: request.config.audioFormat,
+        enableSsl: request.config.enableSsl
       },
     });
 

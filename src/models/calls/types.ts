@@ -87,7 +87,7 @@ export interface PrivateCall {
   defaultPassphrase: string;
   defaultKeyLength: KeyLength;
   defaultLatency: number;
-  defaultMode: StreamMode;
+  defaultMode: StreamMode | RtmpMode;
   streams: Stream[];
   injectionStream: InjectionStream | null;
   publicContext: PublicContext | null;
@@ -129,10 +129,11 @@ export interface StopStreamRequest {
 
 export type StreamConfiguration = {
   streamUrl: string;
-  streamKey: string;
+  streamKey?: string;
   unmixedAudio: boolean;
   audioFormat: number;
   timeOverlay: boolean;
+  enableSsl: boolean;
 };
 
 export interface StreamSrtConfiguration extends StreamConfiguration {
@@ -152,7 +153,7 @@ export interface CallDefaults {
   latency: number;
   passphrase: string;
   keyLength: KeyLength;
-  mode: StreamMode;
+  mode: StreamMode | RtmpMode;
 }
 
 export interface NewStream {
@@ -160,13 +161,14 @@ export interface NewStream {
   participantId?: string;
   participantName?: string;
   streamType: StreamType;
-  mode?: StreamMode;
+  mode?: StreamMode | RtmpMode;
   advancedSettings: {
     url?: string;
     latency?: number;
     passphrase?: string;
     keyLength?: KeyLength;
     unmixedAudio: boolean;
+    enableSsl: boolean;
   };
 }
 
@@ -240,4 +242,9 @@ export enum KeyLength {
   SixteenBytes = 16,
   TwentyFourBytes = 24,
   ThirtyTwoBytes = 32,
+}
+
+export enum RtmpMode {
+  Pull = 1,
+  Push = 2,
 }
