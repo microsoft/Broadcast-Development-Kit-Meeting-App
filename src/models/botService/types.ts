@@ -14,7 +14,7 @@ export interface BotService {
   id: string;
   name: string;
   callId: string;
-  serviceState: BotServiceStates;
+  state: BotServiceStates;
   infrastructure: Infrastructure;
 }
 
@@ -46,10 +46,7 @@ export enum ProvisioningStateValues {
 }
 
 export enum BotServiceStates {
-  Starting = 0,
+  Off = 0,
   Available = 1,
   Unavailable = 2,
-  Stopping = 3,
-  Stopped = 4,
-  Unknown = 5,
 }
