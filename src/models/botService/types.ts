@@ -46,7 +46,7 @@ export enum ProvisioningStateValues {
 }
 
 export enum BotServiceStates {
-  Off = 0,
+  Unavailable = 0,
   Available = 1,
-  Unavailable = 2,
+  Busy = 2,
 }

@@ -51,7 +51,7 @@ const BotServiceCard: React.FC<BotServiceCardProps> = (props) => {
         switch (serviceStates) {
           case BotServiceStates.Available:
             return "#6BB700";
-          case BotServiceStates.Unavailable:
+          case BotServiceStates.Busy:
             return "#E97548";
           default:
             return "#B3B0AD";
