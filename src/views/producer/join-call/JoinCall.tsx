@@ -48,7 +48,7 @@ const JoinCall: React.FC = () => {
   const connecting = connectingCall?.state === CallState.Establishing || isRequesting;
   const botServiceEnabled =
     !!botService &&
-    botService.state === BotServiceStates.Available;
+    (botService.state === BotServiceStates.Available && botService.infrastructure.provisioningDetails.state.id === ProvisioningStateValues.Provisioned);
 
   return (
     <>
