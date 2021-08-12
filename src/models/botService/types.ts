@@ -28,7 +28,7 @@ export interface Infrastructure {
 
 export interface ProvisioningDetails {
   state: ProvisioningState;
-  messsage: string;
+  message: string;
 }
 
 export interface ProvisioningState {
