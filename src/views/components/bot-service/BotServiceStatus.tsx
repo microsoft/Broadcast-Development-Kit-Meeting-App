@@ -7,33 +7,25 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getVirtualMachineStateAsync } from "@/stores/service/asyncActions";
 import { BotService } from "@/models/botService/types";
-import * as BotServiceActions from "@/stores/service/actions";
-import { selectRequesting } from "@/stores/requesting/selectors";
 import BotServiceCard from "./BotServiceCard";
+import { useState } from "react";
+import useInterval from "@/hooks/useInterval";
+import { useCallback } from "react";
 
 const BotServiceStatus: React.FC = () => {
   const dispatch = useDispatch();
+  const [isPollingEnabled, setIsPollingEnabled] = useState(false)
+
   const botServices: BotService[] = useSelector(
     (appstate: AppState) => appstate.botService.botServices
   );
-  const isRequesting: boolean = useSelector((appstate: AppState) =>
-    selectRequesting(appstate, [BotServiceActions.REQUEST_SERVICE_STATUS])
-  );
-  const isStarting: boolean = useSelector((appstate: AppState) =>
-    selectRequesting(appstate, [BotServiceActions.REQUEST_START_SERVICE])
-  );
-  const isStoping: boolean = useSelector((appstate: AppState) =>
-    selectRequesting(appstate, [BotServiceActions.REQUEST_STOP_SERVICE])
-  );
   const hasBotServices = botServices.length > 0;
+  
+  useInterval(useCallback(() => dispatch(getVirtualMachineStateAsync()), [dispatch, getVirtualMachineStateAsync]), isPollingEnabled ? 3000 : null);
 
-  useEffect(() => {
-    if (!isStarting && !isStoping) {
-      setTimeout(() => {
-        dispatch(getVirtualMachineStateAsync());
-      }, 3000);
-    }
-  }, [botServices, isStarting, isStoping]);
+  useEffect(()=>{
+    setIsPollingEnabled(true)
+  },[])
 
   return (
     <>
