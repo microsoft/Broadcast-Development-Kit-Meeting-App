@@ -1,7 +1,5 @@
 # How to use the Meeting App solution
 
-## Introduction
-
 ## Getting Started
 This document explains how to operate the Broadcast Development Kit (BDK) through the Meeting App. This includes:
 
