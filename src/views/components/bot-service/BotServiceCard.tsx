@@ -6,7 +6,11 @@ import { RobotIcon } from "@fluentui/react-icons-northstar";
 import stop20Filled from "@iconify-icons/fluent/stop-20-filled";
 import play20Filled from "@iconify-icons/fluent/play-20-filled";
 import { Flex, Button, Text, Avatar, Card } from "@fluentui/react-northstar";
-import { BotService, ProvisioningStateValues } from "@/models/botService/types";
+import {
+  BotService,
+  BotServiceStates,
+  ProvisioningStateValues,
+} from "@/models/botService/types";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -25,6 +29,13 @@ const BotServiceCard: React.FC<BotServiceCardProps> = (props) => {
   const { id: provisioningStateValue, name: provisioningStateDisplayName } =
     props.botService.infrastructure.provisioningDetails.state;
 
+  const serviceStates = props.botService.state;
+
+  const stateDisplayName =
+    provisioningStateValue === ProvisioningStateValues.Provisioned
+      ? BotServiceStates[serviceStates]
+      : provisioningStateDisplayName;
+
   const showStop: boolean =
     provisioningStateValue === ProvisioningStateValues.Provisioned;
 
@@ -37,7 +48,14 @@ const BotServiceCard: React.FC<BotServiceCardProps> = (props) => {
       case ProvisioningStateValues.Provisioning:
         return "#F8D22A";
       case ProvisioningStateValues.Provisioned:
-        return "#6BB700";
+        switch (serviceStates) {
+          case BotServiceStates.Available:
+            return "#6BB700";
+          case BotServiceStates.Busy:
+            return "#E97548";
+          default:
+            return "#B3B0AD";
+        }
       case ProvisioningStateValues.Deprovisioning:
         return "#E97548";
       case ProvisioningStateValues.Deprovisioned:
@@ -75,11 +93,11 @@ const BotServiceCard: React.FC<BotServiceCardProps> = (props) => {
             label="VM Status"
             status={{
               color: serviceStatusColor(),
-              status: provisioningStateDisplayName,
+              status: stateDisplayName,
             }}
           />
 
-          <Text weight="semibold">Service: {provisioningStateDisplayName}</Text>
+          <Text weight="semibold">Service: {stateDisplayName}</Text>
         </Flex>
         <Button
           icon={

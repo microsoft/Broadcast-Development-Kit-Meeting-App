@@ -8,7 +8,7 @@ import { Layout } from "@/views/components/Layout";
 import { Button, Text, Form, Flex } from "@fluentui/react-northstar";
 import { Context } from "@microsoft/teams-js";
 import { joinCallAsync } from "@/stores/calls/private-call/asyncActions";
-import { ProvisioningStateValues } from "@/models/botService/types";
+import { BotServiceStates, ProvisioningStateValues } from "@/models/botService/types";
 import { selectBotService } from "@/stores/service/selectors";
 import { DEFAULT_SERVICE_ID } from "@/stores/service/constants";
 import BotServiceStatus from "@/views/components/bot-service/BotServiceStatus";
@@ -48,7 +48,7 @@ const JoinCall: React.FC = () => {
   const connecting = connectingCall?.state === CallState.Establishing || isRequesting;
   const botServiceEnabled =
     !!botService &&
-    botService.infrastructure.provisioningDetails.state.id === ProvisioningStateValues.Provisioned;
+    (botService.state === BotServiceStates.Available && botService.infrastructure.provisioningDetails.state.id === ProvisioningStateValues.Provisioned);
 
   return (
     <>
