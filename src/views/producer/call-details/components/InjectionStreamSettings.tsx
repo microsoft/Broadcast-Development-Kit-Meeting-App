@@ -103,7 +103,7 @@ const InjectionStreamSettings: React.FC = () => {
     const newInjectionStream: NewInjectionStream = {
       callId: newStream.callId,
       streamUrl: state.injectionUrl,
-      streamKey: state.passphrase,
+      streamKey: StreamProtocol.SRT ? state.passphrase : undefined,
       protocol: state.protocol || StreamProtocol.SRT,
       mode: state.streamMode || StreamMode.Caller,
       latency: state.latency,
