@@ -19,6 +19,15 @@ This Teams app is developed as a single page application (SPA) in React and Type
 
 ## Getting started
 
+### How to run the solution
+
+You can follow these documents to run and deploy the app:
+- [How to run the solution locally](docs/how-to-run-the-solution-locally/README.md)
+- [How to run the solution in Azure](docs/how-to-run-the-solution-in-azure/README.md)
+
+You can find more information on how to use the app in the following document:
+- [How to use the Meeting App solution](docs/how-to-use-the-meeting-app-solution/README.md)
+
 ### Exploring the repository
 
 The repository is structured in the following directories:
@@ -26,14 +35,6 @@ The repository is structured in the following directories:
 - **public**: Contains static files that are used in the application, including configuration files.
 - **manifest**: Contains the manifest file for the Teams app and the icons.
 - **docs**: Contains the documentation on the solution.
-
-### Running the solution locally
-To run the solution in a local environment please follow the guide listed below:
-- [How to run the solution locally](docs/how-to-run-the-solution-locally/README.md)
-
-### Running the solution in Azure
-To run the solution in Azure please follow the guide listed below:
-- [How to run the solution in Azure](docs/how-to-run-the-solution-in-azure/README.md)
 
 ## Reporting issues
 
