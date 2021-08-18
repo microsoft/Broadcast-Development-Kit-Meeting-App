@@ -1,5 +1,5 @@
 {
-  "buildNumber": "0.0.0",
+  "buildNumber": "0.5.0-dev",
   "apiBaseUrl": "https://localhost:8442/api",
   "releaseDummyVariable": "empty",
   "featureFlags": {
