@@ -20,7 +20,6 @@ const ConfigPage: React.FC = () => {
           contentUrl: host + `/?name={loginHint}&tenant={tid}&group={groupId}&theme={theme}`,
           websiteUrl: host + "/public?name={loginHint}&tenant={tid}&group={groupId}&theme={theme}",
           suggestedDisplayName: "Broadcast Development Kit",
-          removeUrl: host + "/remove?theme={theme}",
           entityId: "something",
         });
         saveEvent.notifySuccess();
