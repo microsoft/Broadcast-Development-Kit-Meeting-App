@@ -9,6 +9,8 @@ import {
 } from "./actions";
 import { getContext } from "@/services/msteams/Context";
 import AppState from "@/stores/AppState";
+import { getTheme } from "@/services/msteams/Theme";
+import { setTheme } from "../ui/actions";
 
 export const getExtensionContext =
   (
@@ -18,6 +20,9 @@ export const getExtensionContext =
     try {
       dispatch(requestContext());
       const context = await getContext(teamsClient);
+      const theme = getTheme(context.theme);
+      
+      dispatch(setTheme(theme));
       return dispatch(requestContextFinished(context));
     } catch (error) {
       return dispatch(

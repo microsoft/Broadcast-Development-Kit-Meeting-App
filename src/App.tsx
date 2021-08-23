@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import React, { useEffect } from "react";
+import React, { CSSProperties, Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Flex,
-  Loader,
   Provider as FluentProvider,
-  teamsDarkTheme,
 } from "@fluentui/react-northstar";
 
 import * as microsoftTeams from "@microsoft/teams-js";
@@ -22,9 +19,19 @@ import SidePanelPage from "@/views/side-panel-page/SidePanelPage";
 import { AlertMessage } from "@/views/components/AlertMessage";
 import PreMeetingPage from "./views/pre-meeting-page/PreMeetingPage";
 import RemovePage from "./views/remove-page/RemovePage";
+import { getTheme } from "./services/msteams/Theme";
+import { setTheme } from "./stores/ui/actions";
+import { Theme } from "./models/ui/types";
 
 const App: React.FC = () => {
+
+  const updateTheme = (theme: string | undefined): void => {
+    const msTeamsTheme = getTheme(theme);
+    dispatch(setTheme(msTeamsTheme));
+  }
+
   microsoftTeams.initialize();
+  microsoftTeams.registerOnThemeChangeHandler(updateTheme);
 
   const dispatch = useDispatch();
   const teamsContext: TeamsContextState = useSelector(
@@ -33,6 +40,8 @@ const App: React.FC = () => {
   const config: ConfigState = useSelector(
     (appState: AppState) => appState.config
   );
+
+  const msTeamsTheme: Theme = useSelector((appState: AppState) => appState.ui.theme);
 
   useEffect(() => {
     dispatch(loadConfig());
@@ -46,54 +55,46 @@ const App: React.FC = () => {
     | FrameContexts
     | undefined;
 
-  const renderContent = (
-    isExtensionReady: boolean,
-    frameContext?: FrameContexts
-  ) => {
-    if (!isExtensionReady) {
-      return (
-        <Flex vAlign="center" hAlign="center" style={{ height: "100vh" }}>
-          <Loader label="Loading extension..." labelPosition="below" />
-        </Flex>
-      );
-    } else {
-      const { SidePanel, PreMeeting, Settings, Remove } = FrameContexts;
-      switch (frameContext) {
-        case SidePanel:
-          return <SidePanelPage />;
-        case PreMeeting:
-          return <PreMeetingPage />;
-        case Settings:
-          return <ConfigPage />;
-        case Remove:
-          return <RemovePage />;
-        default:
-          return null;
-      }
+  const renderContext = (frameContext?: FrameContexts) => {
+    const { SidePanel, PreMeeting, Settings, Remove } = FrameContexts;
+    switch (frameContext) {
+      case SidePanel:
+        return <SidePanelPage />;
+      case PreMeeting:
+        return <PreMeetingPage />;
+      case Settings:
+        return <ConfigPage />;
+      case Remove:
+        return <RemovePage />;
+      default:
+        return null;
     }
   };
 
+  const appStyles = {
+    width: "100%",
+    maxHeight: "100vh",
+    overflow: "auto",
+    overflowY: "auto",
+    overflowX: "hidden",
+    margin: "auto",
+    border: "none",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: (msTeamsTheme.name === "dark" ? "rgb(32, 31, 31)" : undefined)
+  }
+
   return (
-    <FluentProvider theme={teamsDarkTheme}>
-      <div
-        id="app"
-        style={{
-          width: "100%",
-          maxHeight: "100vh",
-          overflow: "auto",
-          overflowY: "auto",
-          overflowX: "hidden",
-          margin: "auto",
-          border: "none",
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "rgb(32, 31, 31)",
-        }}
-      >
-        <AlertMessage />
-        {renderContent(isExtensionReady, frameContext)}
-      </div>
-    </FluentProvider>
+    <Fragment>
+      {isExtensionReady && (
+        <FluentProvider theme={msTeamsTheme.value}>
+          <div id="app" style={appStyles as CSSProperties}>
+            <AlertMessage />
+            {renderContext(frameContext)}
+          </div>
+        </FluentProvider>
+      )}
+    </Fragment>
   );
 };
 
