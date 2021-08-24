@@ -2,9 +2,7 @@
 // Licensed under the MIT license.
 import React, { CSSProperties, Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Provider as FluentProvider,
-} from "@fluentui/react-northstar";
+import { Provider as FluentProvider } from "@fluentui/react-northstar";
 
 import * as microsoftTeams from "@microsoft/teams-js";
 import AppState from "@/stores/AppState";
@@ -24,11 +22,10 @@ import { setTheme } from "./stores/ui/actions";
 import { Theme } from "./models/ui/types";
 
 const App: React.FC = () => {
-
   const updateTheme = (theme: string | undefined): void => {
     const msTeamsTheme = getTheme(theme);
     dispatch(setTheme(msTeamsTheme));
-  }
+  };
 
   microsoftTeams.initialize();
   microsoftTeams.registerOnThemeChangeHandler(updateTheme);
@@ -41,7 +38,9 @@ const App: React.FC = () => {
     (appState: AppState) => appState.config
   );
 
-  const msTeamsTheme: Theme = useSelector((appState: AppState) => appState.ui.theme);
+  const msTeamsTheme: Theme = useSelector(
+    (appState: AppState) => appState.ui.theme
+  );
 
   useEffect(() => {
     dispatch(loadConfig());
@@ -71,6 +70,12 @@ const App: React.FC = () => {
     }
   };
 
+  /* 
+  NOTE: When using Dark mode theme, the background color of Fluent UI doesn't match 
+  with the background color of the MS Teams meeting sidepanel. As a workaround, we
+  override the background color when the selected theme is dark.
+  */
+
   const appStyles = {
     width: "100%",
     maxHeight: "100vh",
@@ -81,8 +86,9 @@ const App: React.FC = () => {
     border: "none",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: (msTeamsTheme.name === "dark" ? "rgb(32, 31, 31)" : undefined)
-  }
+    backgroundColor:
+      msTeamsTheme.name === "dark" ? "rgb(32, 31, 31)" : undefined,
+  };
 
   return (
     <Fragment>
