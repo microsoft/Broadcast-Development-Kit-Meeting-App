@@ -33,7 +33,7 @@ const Attendee: React.FC = () => {
     isPollingEnabled ? pollingTime : null
   );
 
-  const isBroadcasting = publicCallState?.activeCall?.streamState === StreamState.Started;
+  const isBroadcasting = publicCallState?.activeCall?.streamState === StreamState.Ready;
 
   return (
     <>

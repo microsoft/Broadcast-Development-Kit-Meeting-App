@@ -12,6 +12,11 @@ export const getUserRole = async (
   groupId: string | undefined
 ): Promise<UserRoles> => {
   try {
+    
+    if (!groupId){
+      return UserRoles.Producer;
+    }
+
     const authToken = await getMsTeamsAuthToken(teamsClient);
     const decodedToken = jwtDecode(authToken) as Object;
     const userRole =

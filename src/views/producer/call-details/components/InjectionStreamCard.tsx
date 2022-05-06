@@ -113,6 +113,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
     return stream.injectionUrl ?? "";
   };
 
+  const isStreamStarted = stream?.state && [StreamState.Ready, StreamState.Receiving, StreamState.NotReceiving].includes(stream.state);
   const injectionUrl = stream ? getInjectionUrl(stream) : "";
 
   return (
@@ -163,7 +164,7 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
                 <CallRecordingIcon
                   style={{
                     color:
-                      stream?.state === StreamState.Started ? "#E73550" : "",
+                    isStreamStarted ? "#E73550" : "",
                   }}
                 />
               }
@@ -227,12 +228,12 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
               <CallRecordingIcon
                 style={{
                   marginRight: "0.25rem",
-                  color: stream?.state === StreamState.Started ? "#E73550" : "",
+                  color: isStreamStarted ? "#E73550" : "",
                 }}
               />
               <Text
                 content={
-                  stream?.state === StreamState.Started ? "Stop" : "Record"
+                  isStreamStarted ? "Stop" : "Record"
                 }
               />
             </Button>
@@ -240,11 +241,13 @@ const InjectionStreamCard: React.FC<InjectionCardProps> = (props) => {
 
           <Divider color="gray" fitted style={{ marginTop: "4px" }} />
 
-          {stream?.state === StreamState.Started && (
+          {stream && isStreamStarted && (
             <Flex column>
               <Text size="large" weight="bold">
                 Details
               </Text>
+              <Text weight="bold" content="State: " />
+              <Text>{StreamState[stream.state!]}</Text>
 
               <Text weight="bold" content="Stream URL:" />
 

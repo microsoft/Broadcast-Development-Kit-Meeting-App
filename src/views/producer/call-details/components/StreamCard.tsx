@@ -118,7 +118,9 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
   const streamOperationEnabled = () => {
     switch (stream.state) {
-      case StreamState.Started:
+      case StreamState.Ready:
+      case StreamState.Receiving:
+      case StreamState.NotReceiving:
         return true;
       case StreamState.Disconnected:
         switch (stream.type) {
@@ -132,6 +134,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
           case StreamType.TogetherMode:
             return stream.isSharingVideo;
         }
+        break;
       default:
         return false;
     }
@@ -160,6 +163,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
   const isStreamTypeSpecial = SpecialStreamTypes.includes(stream.type);
   const isStreamOperationEnabled = streamOperationEnabled();
   const streamUrl = stream ? getStreamUrl(stream) : "";
+  const isStreamReady = stream.state === StreamState.Ready;
 
   return (
     <Flex>
@@ -207,7 +211,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
                 <CallRecordingIcon
                   style={{
                     color:
-                      stream.state === StreamState.Started ? "#E73550" : "",
+                    isStreamReady ? "#E73550" : "",
                   }}
                 />
               }
@@ -272,12 +276,12 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
               <CallRecordingIcon
                 style={{
                   marginRight: "0.25rem",
-                  color: stream.state === StreamState.Started ? "#E73550" : "",
+                  color: isStreamReady ? "#E73550" : "",
                 }}
               />
               <Text
                 content={
-                  stream.state === StreamState.Started ? "Stop" : "Record"
+                  isStreamReady ? "Stop" : "Record"
                 }
               />
             </Button>
@@ -285,7 +289,7 @@ const StreamCard: React.FC<StreamCardProps> = (props) => {
 
           <Divider color="gray" fitted style={{ marginTop: "4px" }} />
 
-          {stream.state === StreamState.Started && (
+          {isStreamReady && (
             <Flex column>
               <Text size="large" weight="bold">
                 Details

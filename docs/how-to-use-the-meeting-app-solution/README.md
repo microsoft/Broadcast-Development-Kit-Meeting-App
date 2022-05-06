@@ -136,6 +136,8 @@ Finally, click on the `Start` button to start the injection. You will be returne
 
 To stop the stream injection you just need to click on the same `Record` button in collapsed view or click on the `Stop` button in the expanded view.
 
+>**NOTE**: The state of the Injection could change from `Ready` to `Receiving` or `Not Receiving` depending on whether or not any content is being injected.
+
 ### How to extract media content from the meeting
 To extract media content from the meeting you need to go to the Main Streams or Participants section. In the corresponding stream `Card` you want to extract click on the `Record` button.
 
