@@ -26,14 +26,16 @@ export interface ConnectionPool {
 export enum StreamState {
   Disconnected,
   Starting,
-  Started,
+  Ready,
+  Receiving,
+  NotReceiving,
   Stopping,
   StartingError,
   StoppingError,
   Error,
 }
 
-export const ActiveStatuses = [StreamState.Started, StreamState.Stopping];
+export const ActiveStatuses = [StreamState.Ready, StreamState.Receiving, StreamState.NotReceiving, StreamState.Stopping];
 export const InactiveStatuses = [
   StreamState.Disconnected,
   StreamState.Starting,

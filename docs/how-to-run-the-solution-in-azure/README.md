@@ -23,6 +23,7 @@ Create a new [App Registration](https://docs.microsoft.com/en-us/azure/active-di
   - `Supported account types`: Accounts in any organizational directory (Any Azure AD directory – Multitenant)
 - `Certificates and clients`: None.
 - `Token configuration`: Press on `Add groups claim` and `Save` a new one with following configuration. Keep `Emit groups as role claims` **unchecked** for all types.
+  - `Group types`: Security groups
   - `Id`: Group ID.
   - `Access`: Group ID.
   - `SAML`: Group ID.
@@ -180,7 +181,7 @@ Placeholder | Description
  apiBaseUrl | Base url of the Management API hosted in Azure.
  spaClientId | Client Id of the App Registration of this frontend solution.
  clientId | Client Id of the App Registration of the ManagementApi.
- groupId | ObjectId of the group created on Azure.
+ groupId | ObjectId of the [group](https://github.com/microsoft/Broadcast-Development-Kit/blob/main/docs/how-to-run-the-solution-in-azure/security_group.md) created on Azure. If left empty, users do not need to belong to the security group to log in to the Web Portal.
  tenantId | Azure account Tenant Id.
  domain | Domain of your organization. (e.g: `mydomain.com`)
 
